@@ -1,0 +1,11 @@
+# OS junk
+.DS_Store
+**/.DS_Store
+
+# Build/deploy artifacts (regenerated on demand)
+deploy.zip
+*.zip
+
+# Editor/local
+.vscode/
+.idea/

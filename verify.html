@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify a Credential — Commercient Academy</title>
+<meta name="description" content="Confirm a Commercient Academy credential is authentic and current. Every certification carries a registered, publicly verifiable Credential ID.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Verify a Credential — Commercient Academy">
+<meta property="og:description" content="Confirm a Commercient Academy credential is authentic and current. Every certification carries a registered, publicly verifiable Credential ID.">
+<meta property="og:image" content="https://commercient-academy.netlify.app/assets/og-card.png">
+<link rel="icon" href="assets/commercient-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#29ABE2;--charcoal:#3D3D3D;--navy:#1B3A5C;--cloud:#E8EEF4;--steel:#4A7FA5;--line:#dbe4ec;--muted:#6a7886}
+  *{box-sizing:border-box} body{margin:0;font-family:'Open Sans',sans-serif;background:var(--cloud);color:var(--charcoal);line-height:1.6}
+  .top{display:flex;align-items:center;gap:14px;height:64px;padding:0 28px;background:#fff;border-bottom:1px solid var(--line)}
+  .top img{height:34px}
+  .top .t{font-family:'Raleway';font-weight:700;letter-spacing:.13em;font-size:12.5px;text-transform:uppercase;border-left:1px solid var(--line);padding-left:14px}
+  .wrap{max-width:640px;margin:48px auto;padding:0 20px}
+  h1{font-family:'Raleway';font-weight:800;font-size:28px;margin:0 0 8px}
+  .lead{color:#52606d;margin:0 0 24px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px 30px;box-shadow:0 1px 3px rgba(27,58,92,.08),0 4px 16px rgba(27,58,92,.06)}
+  .row{display:flex;gap:10px}
+  input{flex:1;font:inherit;padding:11px 14px;border:1.5px solid var(--line);border-radius:9px}
+  input:focus{outline:none;border-color:var(--teal)}
+  button{font-family:'Raleway';font-weight:700;letter-spacing:.04em;background:var(--teal);color:#fff;border:none;border-radius:9px;padding:12px 24px;font-size:14px;cursor:pointer}
+  button:hover{background:#1f93c6}
+  .result{margin-top:22px;display:none}
+  .status{display:inline-block;font-family:'Raleway';font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:30px;margin-bottom:14px}
+  .status.valid{background:#e5f5e7;color:#2e7d32}
+  .status.expired{background:#fdf0e2;color:#b26a00}
+  .status.revoked,.status.notfound{background:#fbe9e7;color:#b23b32}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin-top:6px}
+  .meta div span{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .meta .full{grid-column:1/-1}
+  .holder{font-family:'Raleway';font-weight:800;font-size:24px;color:var(--navy);margin:0 0 2px}
+  .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:28px}
+  .foot a{color:var(--teal);text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="top">
+    <img src="assets/commercient-logo.png" alt="Commercient">
+    <span class="t">Academy · Credential Verification</span>
+  </div>
+  <div class="wrap">
+    <h1>Verify a credential</h1>
+    <p class="lead">Every Commercient Academy certification carries a registered Credential ID. Enter one below to confirm it's authentic and current.</p>
+    <div class="card">
+      <div class="row">
+        <input id="cid" placeholder="e.g. CA-PLAT-2026-1A2B3C" autocomplete="off">
+        <button id="go">Verify</button>
+      </div>
+      <div class="result" id="result"></div>
+    </div>
+    <p class="foot">Issued by <a href="https://www.commercient.com" rel="noopener">Commercient</a> · <a href="index.html">Commercient Academy</a></p>
+  </div>
+<script src="config.js?v=1"></script>
+<script>
+(function(){
+  const CFG = window.ACADEMY_CONFIG || {};
+  const $ = id => document.getElementById(id);
+  const fmt = s => new Date(s).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  async function verify(id){
+    const box = $('result');
+    box.style.display = 'block';
+    box.innerHTML = '<p style="color:var(--muted)">Checking…</p>';
+    try{
+      const resp = await fetch(CFG.SUPABASE_URL + '/rest/v1/rpc/verify_credential', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': CFG.SUPABASE_ANON_KEY,
+                   'Authorization': 'Bearer ' + CFG.SUPABASE_ANON_KEY },
+        body: JSON.stringify({ p_credential_id: id })
+      });
+      if(!resp.ok) throw new Error('Verification service unavailable (' + resp.status + ').');
+      const d = await resp.json();
+      if(!d.found){
+        box.innerHTML = '<span class="status notfound">Not found</span><p style="margin:0">No credential matches <strong>' + esc(id) + '</strong>. Check the ID and try again.</p>';
+        return;
+      }
+      const label = d.status === 'valid' ? '✓ Valid credential' : d.status === 'expired' ? 'Expired' : 'Revoked';
+      box.innerHTML =
+        '<span class="status ' + d.status + '">' + label + '</span>' +
+        '<p class="holder">' + esc(d.holder_name) + '</p>' +
+        (d.company ? '<p style="margin:0 0 14px;color:#52606d">' + esc(d.company) + '</p>' : '') +
+        '<div class="meta">' +
+          '<div class="full"><span>Certification</span>' + esc(d.course_title) + '</div>' +
+          '<div><span>Credential</span>' + esc(d.badge_name) + '</div>' +
+          '<div><span>Credential ID</span>' + esc(d.credential_id) + (d.cred_no ? ' · #' + String(d.cred_no).padStart(4,'0') : '') + '</div>' +
+          '<div><span>Issued</span>' + fmt(d.issued_at) + '</div>' +
+          '<div><span>Valid through</span>' + fmt(d.expires_at) + '</div>' +
+        '</div>';
+    }catch(e){
+      box.innerHTML = '<span class="status notfound">Error</span><p style="margin:0">' + esc(e.message||'Something went wrong.') + '</p>';
+    }
+  }
+  function esc(s){ const d=document.createElement('div'); d.textContent=s==null?'':String(s); return d.innerHTML; }
+
+  $('go').addEventListener('click', ()=>{ const v=$('cid').value.trim(); if(v) verify(v); });
+  $('cid').addEventListener('keydown', e=>{ if(e.key==='Enter'){ const v=$('cid').value.trim(); if(v) verify(v); } });
+
+  const fromUrl = new URLSearchParams(location.search).get('id');
+  if(fromUrl){ $('cid').value = fromUrl; verify(fromUrl); }
+})();
+</script>
+</body>
+</html>
