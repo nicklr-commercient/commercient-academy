@@ -582,9 +582,9 @@ const QUIZ = {
       "q": "What are the three connected pieces of the Commercient Platform?",
       "a": [
         "The AI Platform, the Data Lake, and Data Integration.",
-        "Integration, reporting, and analytics.",
+        "Data integration, self-service reporting, and predictive business analytics.",
         "The CRM, the ERP, and the eCommerce store.",
-        "Discovery, onboarding, and managed services."
+        "Guided discovery, hands-on onboarding, and ongoing managed services."
       ]
     },
     {
@@ -601,20 +601,20 @@ const QUIZ = {
       "s": 0,
       "q": "In the platform architecture, what sits at the center that the other pieces connect to?",
       "a": [
-        "The AI Platform's agent host.",
-        "The Partner Portal.",
+        "The AI Platform's agent host, where the agents actually run.",
+        "The Partner Portal, where partners quote and track their deals.",
         "The Commercient Data Lake — one governed, always-current database per customer.",
-        "The customer's CRM."
+        "The customer's CRM, their primary system of record."
       ]
     },
     {
       "s": 0,
       "q": "Which integrator brings data INTO the Data Lake?",
       "a": [
-        "The CDC Replicator (Commercient Universal Data Connector).",
-        "The Enterprise System Transactional Integrator.",
-        "The Enterprise CRM Integrator.",
-        "The Point-to-Point Pulse Integrator."
+        "The CDC Replicator, the Commercient Universal Data Connector.",
+        "The Enterprise System Transactional Integrator, which writes out to ERPs.",
+        "The Enterprise CRM Integrator, which writes out to CRM systems.",
+        "The Point-to-Point Pulse Integrator, which pushes out to webhooks."
       ]
     },
     {
@@ -634,17 +634,17 @@ const QUIZ = {
         "It works only with modern cloud systems that expose a public REST API.",
         "It requires the customer to write and maintain custom code to normalize their data.",
         "It replaces the on-premise agent, so no Commercient software runs in the customer's environment.",
-        "It gives codeless connectivity to ODBC, SQL, CSV, SFTP, REST, SOAP, and API, normalized into a SQL-like model."
+        "It gives codeless connectivity to ODBC, SQL, files, and APIs, normalized into a SQL-like model."
       ]
     },
     {
       "s": 0,
       "q": "A customer's 20-year-old ERP sits on a closed network \"nobody may touch.\" What fits best?",
       "a": [
-        "The opportunity is disqualified — a closed-network system can't be connected.",
-        "The customer must first migrate to a supported cloud ERP.",
-        "Commercient opens an inbound firewall rule and reads the server directly.",
-        "The ODBC Agent sits beside the database and pushes data outbound into the lake, giving it modern APIs and events."
+        "The opportunity is disqualified, since a closed-network system simply can't be connected.",
+        "The customer must first migrate to a supported cloud ERP before connecting.",
+        "Commercient opens an inbound firewall rule and reads the legacy server directly.",
+        "The ODBC Agent sits beside the database and pushes data outbound, no inbound firewall needed."
       ]
     },
     {
@@ -661,10 +661,10 @@ const QUIZ = {
       "s": 0,
       "q": "How does the Data Lake serve data out, and what protects it?",
       "a": [
-        "Three surfaces — APIs, AI via MCP, and real-time events — all behind one security gate.",
-        "A single nightly export emailed to administrators.",
-        "Direct database logins shared with each application.",
-        "A shared analytics warehouse pooling many customers' data together."
+        "Three surfaces — APIs, AI through MCP, and real-time events — behind one security gate.",
+        "A single nightly batch export, emailed on a fixed schedule to administrators.",
+        "Direct database logins, one credential set shared with each connected application.",
+        "A shared analytics warehouse that pools many customers' data together for benchmarking."
       ]
     },
     {
@@ -681,20 +681,20 @@ const QUIZ = {
       "s": 0,
       "q": "What connects a customer's agents to the platform's tools and to the governed data?",
       "a": [
-        "A single shared admin password.",
-        "Two External MCP Servers — the AI Platform MCP Server (tools) and the Data Lake MCP Server (data).",
-        "A nightly CSV export.",
-        "A direct VPN tunnel into the customer's ERP."
+        "A single shared admin password, rotated quarterly and kept in a vault.",
+        "Two External MCP Servers — one for the AI Platform, one for the Data Lake.",
+        "A nightly CSV export delivered to a shared SFTP folder for pickup.",
+        "A direct VPN tunnel opened inbound into the customer's ERP network."
       ]
     },
     {
       "s": 1,
       "q": "How is the platform subscription best described?",
       "a": [
-        "A single one-time license covering all three pieces forever.",
-        "Pure per-user pricing matching the CRM User License in the Quoting Tool.",
-        "One subscription line per piece: AI Platform (platform + MCP server + per agent), Data Lake (platform + MCP server), and Data Integration (per source).",
-        "A flat monthly fee including unlimited agents, sources, and usage."
+        "A single one-time perpetual license covering all three pieces forever, with no recurring fee.",
+        "Pure per-user pricing, matching the CRM User License line shown in the Quoting Tool.",
+        "One subscription line per piece — AI Platform, Data Lake, and Data Integration, priced separately.",
+        "A single flat monthly fee bundling unlimited agents, sources, and all usage together."
       ]
     },
     {
@@ -712,8 +712,8 @@ const QUIZ = {
       "q": "How is Commercient Data Integration priced within the subscription?",
       "a": [
         "A single flat fee regardless of how many systems connect.",
-        "Per source, per integrator — each connected source carries its own recurring fee.",
-        "Per CRM user, matching the integration Quoting Tool.",
+        "Per source, per integrator — each connected source carries a recurring fee.",
+        "Per CRM user seat, matching the integration Quoting Tool's model.",
         "Only as a one-time setup charge with no recurring component."
       ]
     },
@@ -722,9 +722,9 @@ const QUIZ = {
       "q": "In the usage model, which set correctly lists metered usage categories?",
       "a": [
         "Sync volume (per GB), API/webhook/MCP calls, compute credits, and model tokens.",
-        "Seats, logins, dashboards, and reports.",
-        "Agents, sources, phases, and add-ons.",
-        "Emails, tickets, meetings, and calls."
+        "Named user seats, account logins, saved dashboards, and exported reports.",
+        "Configured agents, connected data sources, project phases, and purchased add-ons.",
+        "Support emails, open tickets, scheduled meetings, and outbound calls."
       ]
     },
     {
@@ -733,7 +733,7 @@ const QUIZ = {
       "a": [
         "\"Usage is fixed to a single monthly cap you can never exceed or adjust.\"",
         "\"You provision a fixed baseline up front and pay it whether you use it or not.\"",
-        "\"You pay for what you use, we build in caps, and after a cycle or two we smooth it into a predictable prepaid baseline.\"",
+        "\"You pay for what you use, we build in caps, then smooth it into a predictable baseline.\"",
         "\"Usage pricing can't be estimated, so it stays fully variable for the life of the contract.\""
       ]
     },
@@ -751,10 +751,10 @@ const QUIZ = {
       "s": 1,
       "q": "How is onboarding delivered?",
       "a": [
-        "A single configuration call, after which everything is immediately live.",
-        "Prepaid blocks of hours, with a distinct guided path for each of the three pieces.",
-        "An open-ended engagement billed hourly with no defined steps.",
-        "A full migration of the customer's CRM into the Commercient environment."
+        "A single configuration call, after which the whole platform is immediately live.",
+        "Prepaid blocks of guided hours, with a distinct path for each of the three pieces.",
+        "An open-ended engagement billed hourly, with no clearly defined steps or milestones.",
+        "A full migration of the customer's CRM into the Commercient cloud environment."
       ]
     },
     {
@@ -782,7 +782,7 @@ const QUIZ = {
       "q": "The website search returns no result for a customer's system combination. What is the right read?",
       "a": [
         "Commercient can't support that combination at all, so the opportunity is dead.",
-        "It's likely outside the standard catalog and doable via UDC or the Pulse Integrator — confirm the path.",
+        "It's likely outside the standard catalog but doable via UDC or Pulse — confirm the path.",
         "The customer must first switch to a fully listed ERP before Commercient can help.",
         "Build the quote anyway and let the quoting tool make the final decision."
       ]
@@ -802,9 +802,9 @@ const QUIZ = {
       "q": "A customer says, \"We want to put AI on our own data.\" Which is the cleanest match?",
       "a": [
         "The Data Lake, opened to agents through the External MCP Server.",
-        "A one-time export to a spreadsheet.",
-        "A new CRM to replace their existing systems.",
-        "An ERP-to-ERP integration."
+        "A one-time export of their records to a spreadsheet.",
+        "A brand-new CRM to replace all of their existing systems.",
+        "A direct ERP-to-ERP integration between the two systems."
       ]
     },
     {
@@ -831,10 +831,10 @@ const QUIZ = {
       "s": 2,
       "q": "A customer says, \"We already have Agentforce, Breeze, and Zoho AI — maybe that's enough.\" Best response?",
       "a": [
-        "\"Right — CRM-native AI completely removes any need for connected ERP data.\"",
+        "\"Right — CRM-native AI completely removes any need for connected ERP data at all.\"",
         "\"Those tools are quite weak, so you should replace them entirely with Commercient AI.\"",
-        "\"Hold off on any AI until integration and certification are both complete.\"",
-        "\"Those are great — each sees one system; Commercient connects your data so they, and cross-system agents, work from a fuller picture.\""
+        "\"Hold off on any AI until the integration and your certification are both complete.\"",
+        "\"Those are great — each sees one system; Commercient connects your data so they see the full picture.\""
       ]
     },
     {
@@ -871,9 +871,9 @@ const QUIZ = {
       "s": 3,
       "q": "What does the Quoting Tool cover, and what does it not?",
       "a": [
-        "It covers integration ballparks; AI, Data Lake, and usage pricing are scoped with the Commercient team.",
+        "It covers integration ballparks; AI, Data Lake, and usage pricing are scoped with Commercient.",
         "It produces final, binding prices for all three pieces of the platform.",
-        "It covers AI and Data Lake pricing but not integration.",
+        "It covers AI and Data Lake pricing, but not integration ballparks.",
         "It replaces the need to involve Commercient sales on any deal."
       ]
     },
@@ -963,7 +963,7 @@ const QUIZ = {
       "a": [
         "They must wait for an engineer-led kickoff before any onboarding work begins.",
         "The partner must first complete a TPAF before the customer can start anything.",
-        "They get a welcome email and begin the Commercient Guided Implementation (CGI), with live Customer Success available.",
+        "They get a welcome email and begin Commercient Guided Implementation (CGI), with live Customer Success.",
         "They start with Phase 2 planning first and then return to CGI later."
       ]
     },
@@ -983,18 +983,18 @@ const QUIZ = {
       "a": [
         "It is fully in scope, because Commercient owns how the data behaves once it lands.",
         "It is in scope, but only when the integration happens to be bidirectional.",
-        "It is all covered automatically under the customer's annual success fee.",
-        "It's mostly out of scope; Commercient owns movement and mapping, the customer owns cleanup and business logic."
+        "It is all covered automatically under the customer's annual success plan fee.",
+        "Mostly out of scope: Commercient owns data movement and mapping; the customer owns cleanup and business logic."
       ]
     },
     {
       "s": 5,
       "q": "Which scenario is most likely to land near the fast end of the standard timeline?",
       "a": [
-        "CGI done fast, credentials on day one, standard versions, one accountable POC, and a reliable CDC field.",
+        "Fast CGI, day-one credentials, standard versions, one accountable POC, and a reliable CDC field.",
         "Strong leadership buy-in and a plan to add AI and automation later.",
-        "A clear business reason to integrate and several departments identified.",
-        "Both systems in daily use and budget approved this quarter."
+        "A clear business reason to integrate, with several departments already identified.",
+        "Both systems in daily use, with budget approved earlier this quarter."
       ]
     },
     {
