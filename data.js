@@ -1986,6 +1986,444 @@ const CUSTOMER_PANEL_QUIZ = {
    `status:"coming-soon"` for a teaser tile. Defined last so it can reference
    the MODULES and QUIZ consts above.
 ---------------------------------------------------------------------- */
+/* ==========================================================================
+   EXTERNAL AGENT SETUP — course data (built from ExternalAgentSetupGuide.pdf)
+   Staff/implementer runbook. Screenshots in assets/external-agent/.
+   Internal person-names in the source genericized to roles (per Nick's rule).
+   ========================================================================== */
+const EA_PRE = 'assets/external-agent/';
+function eaShot(file, cap){
+  return `<figure class="shot"><img src="${EA_PRE}${file}" alt="${cap.replace(/"/g,'&quot;')}" onerror="this.closest('.shot').classList.add('missing')"><span class="ph">Screenshot<code>${EA_PRE}${file}</code></span><figcaption>${cap}</figcaption></figure>`;
+}
+// monospace, theme-neutral, scrollable block for the verbatim Claude prompts
+function eaPrompt(text){
+  return `<pre style="white-space:pre-wrap;border:1px solid #9fb3c4;border-radius:10px;padding:14px 16px;margin:14px 0;overflow:auto;font-size:12.5px;line-height:1.55;font-family:ui-monospace,Menlo,Consolas,monospace">${text}</pre>`;
+}
+
+const SYS_MSG_PROMPT = `Above this message is Commercient's default system prompt for our external AI agents. I need you to adapt it into a finished, client-specific system message that I can paste directly into the agent's System Message field.
+
+FIRST, BEFORE DOING ANYTHING ELSE
+Do not research, write, or generate anything yet. Your entire first response must be a short request for these two inputs:
+1. COMPANY — the client's name and website URL
+2. AGENT PURPOSE — 1-3 sentences: who the agent talks to, what it should help them do, and what action it should push them toward
+Ask for both, then stop and wait. Do not guess at either one. Do not produce a draft, a partial prompt, or an example. Once I reply with the two inputs, proceed to the steps below.
+
+THEN, ONCE I'VE PROVIDED THE INPUTS
+1. RESEARCH FIRST. Look up the company online before writing. Identify: what they sell or do, their customer type (B2C retail vs. B2B/professional services vs. industrial/technical), their main product or service categories, the industries or markets they serve, their public contact method (support email, sales inbox, or quote/contact page), and any notable credentials, certifications, or positioning claims. If more than one company shares the name, stop and ask me which one before writing anything.
+2. REWRITE THE DEFAULT, DON'T REPLACE IT. Keep the default's structure and logic intact — the #### query delimiters, the step sequence (tool identification &rarr; search_pinecone_documents &rarr; clarification &rarr; final answer), the markdown output requirement, and the exact Sources:[doc_123,doc_456] format appended after three newlines with only genuinely-used doc IDs. These are platform requirements, not stylistic choices. Change the framing, scope, tone, and examples; do not change the mechanics.
+3. ADD THESE CLIENT-SPECIFIC ELEMENTS:
+   - An opening identity line: who the agent is, what company it represents, what site it lives on.
+   - A compact company snapshot (1-2 sentences max) covering what they sell/do and their main categories or markets, so basic "who are you / what do you sell" questions don't burn a retrieval call.
+   - A scope statement: answer ONLY from the client's own website content and documentation; do not answer outside their scope; do not invent information.
+   - A tone instruction matched to the customer type (warm and helpful for consumer retail; professional and knowledgeable for B2B or technical).
+   - An escalation path: where to send visitors for pricing, quotes, specs, or anything the agent can't answer — using the client's real contact method.
+   - A no-results fallback with exact wording, pointing to the client's site and contact method. (The default lacks a clean version of this; always add one.)
+   - Guidance to link to specific website pages where relevant and nudge toward the conversion action named in AGENT PURPOSE.
+4. REPLACE ALL EXAMPLES. The default's examples are Commercient-internal (integration passwords, sync resets, Salesforce exports) and must all go. Write 3 new examples using realistic questions this client's actual visitors would ask. Cover these three cases:
+   - a normal answered question that uses retrieval and ends with a correct Sources list
+   - an ambiguous question that triggers a clarifying question and NO Sources list
+   - a question with no relevant content that triggers the fallback wording
+   Three examples is the target. The default's five are more than needed, and every example is billed on every single call.
+5. KEEP IT LEAN. This prompt is sent with every request, so token count directly drives API cost, and these agents often run under a hard budget cap. Be compact and concrete. Cut anything decorative. Prefer short declarative instructions over explanation. Do not pad.
+
+OUTPUT FORMAT
+Return the finished system message in a single code block, ready to paste with no edits. Below the code block, briefly list (a) what you changed from the default and why, and (b) any detail you inferred or guessed — especially contact emails, URLs, or credentials — that I should verify with the client before going live.`;
+
+const DEMO_PROMPT = `Same client as the system message we just built above — reuse the company and research from that conversation. Do not ask me to re-enter it.
+
+Above this message is the embed script generated by our portal. Build me a single-file mock demo webpage with that widget embedded, so the client can see their agent in a realistic setting.
+
+THE EMBED SCRIPT IS SACRED
+Copy the entire &lt;script&gt; tag verbatim into the page, immediately before the closing &lt;/body&gt; tag. Do not retype, reformat, reindent, line-wrap, or "clean up" any attribute value. The data-chatbot-id, data-public-key, and data-bubble-icon values are long opaque strings — reproducing them by hand corrupts them. Copy, never transcribe.
+If for any reason you cannot reproduce an attribute value exactly (base64 icons are the usual culprit), do NOT guess or approximate it. Omit that single attribute, leave an HTML comment marking where it goes, and tell me in your notes so I can paste it back myself. Never omit data-chatbot-id or data-public-key — those must always be exact.
+Do not add a second widget, a fake chat bubble, a mock chat window, or any simulated version of the agent. The real widget renders itself in its own corner. The page must not compete with it.
+
+THE PAGE
+Research the client's actual website before designing. Match what's really there: their real color palette (pull the actual brand colors; do not invent a scheme); their real logo treatment (recreate the mark in inline SVG/CSS or use a clean text wordmark — never hotlink their image files); their real navigation labels; their real headline/tagline; their real product or service categories; and their real contact details and primary call-to-action (Request a Quote, Shop Now, Book a Consultation, etc.). If I've already shared a screenshot of their site in this chat, treat it as the source of truth.
+Build a realistic single-page layout — header/nav, hero with headline and CTA, a categories or services section, a secondary band (stats, applications, or a quote), and a footer. Match the tone to the sector: consumer retail warm and inviting; B2B and industrial clean and engineered. Tasteful motion is fine; no gimmicks. Content should be plausible and drawn from real research, but this is a demo backdrop — all nav links and buttons are href="#" placeholders. Add a light footer line inviting visitors to use the chat.
+
+CONSTRAINTS
+- One self-contained .html file. Inline CSS in a &lt;style&gt; block. No frameworks, no build step, no external assets, no CDN links, no hotlinked images.
+- Must render correctly opened directly from disk. Responsive at phone width, with the widget still reachable.
+- Nothing may overlap the widget's corner — keep it clear of sticky elements, floating buttons, or back-to-top controls.
+
+DELIVERABLE
+Give me the finished .html file, named after the client (e.g. clientname-demo.html). Then briefly: (a) confirm the embed script was copied verbatim and flag any attribute you had to omit; (b) list anything you inferred about the brand that I should sanity-check; (c) remind me that if the widget doesn't appear from file://, serve locally with python3 -m http.server 8000 and load http://localhost:8000/&lt;filename&gt;.`;
+
+const EXTERNAL_AGENT_MODULES = [
+  {
+    id: 1, group: "Before You Start",
+    title: "What you're building & prerequisites",
+    time: "5 min",
+    objectives: [
+      "Explain what a Commercient external agent is and where it lives",
+      "Turn on the Commercient AI Sync Agent from the employee instance",
+      "Get into the customer instance with the right access"
+    ],
+    body: `
+<h3>What an external agent is</h3>
+<p>A Commercient <strong>external agent</strong> is a customer-facing AI assistant that lives on a customer's website — the chat bubble in the corner, the same way Charlie sits in the corner of the Commercient site. It answers visitors from the customer's own website content and documentation, links them to the right pages, and nudges them toward a conversion action like a quote or a contact. This course walks the full setup, end to end.</p>
+<div class="callout"><h4>Who this course is for</h4><p>This is a hands-on runbook for the Commercient team members and implementation partners who stand up external agents for customers. Several steps happen inside Commercient's own instances and need staff access.</p></div>
+<h3>Step 1 — Turn on the Commercient AI Sync Agent</h3>
+<p>From <strong>within the Commercient employee instance</strong> (not the customer's), open <strong>Product</strong> and search <strong>"AI."</strong> Select <strong>"CommercientAISyncAgent,"</strong> leave the name at its default, and click <strong>Create</strong>. Refresh the page until the status reads <strong>"Installed."</strong></p>
+${eaShot('01-turn-on-sync-agent.png','Product &rarr; search "AI" to find the Commercient AI Sync Agent.')}
+${eaShot('02-create-sync-agent.png','Select CommercientAISyncAgent, leave the name default, and Create; refresh until status is "Installed."')}
+<h3>Step 2 — Get into the customer instance</h3>
+<p>The rest of setup happens inside the <strong>customer's</strong> instance. Collect the customer's credentials from your Commercient onboarding lead, then log into the customer instance. The dashboards look the same as always, but new setup actions become available.</p>`,
+    takeaways: [
+      "An external agent is a customer-facing website chat that answers from the customer's own content",
+      "Turn on the CommercientAISyncAgent from the employee instance and wait for status \"Installed\"",
+      "Do the rest of setup inside the customer's instance, using credentials from your onboarding lead"
+    ]
+  },
+  {
+    id: 2, group: "Keys & Knowledge Base",
+    title: "API keys & the knowledge base",
+    time: "5 min",
+    objectives: [
+      "Add the two API keys the agent needs",
+      "Use a consistent, company-prefixed naming convention",
+      "Initialize the agent's knowledge base"
+    ],
+    body: `
+<h3>Step 3 — Add the API keys</h3>
+<p>In the customer instance, go to <strong>AI Tools &rarr; API Keys</strong>. You need two keys — request both from your Commercient AI/platform contact:</p>
+<ul><li>an <strong>OpenAI API key</strong></li><li>a <strong>Pinecone key</strong> (and its URL)</li></ul>
+<p>Click <strong>Actions &rarr; Add</strong> to add each one. Name them with a clear, company-prefixed convention so they're easy to pick later: <code>CompanyNameOPENAI</code> and <code>CompanyNamePinecone</code>.</p>
+${eaShot('03-api-keys.png','AI Tools &rarr; API Keys &rarr; Actions &rarr; Add — add the OpenAI and Pinecone keys.')}
+<h3>Step 4 — Initialize the knowledge base</h3>
+<p>Create the knowledge base the agent will draw on. Name it <code>CompanyNameExternal</code>. The description has no programmatic effect — just note what the agent is for and which company it belongs to. Leave the sharing options off.</p>
+${eaShot('04-init-knowledge-base.png','Initialize the knowledge base named CompanyNameExternal; leave sharing off.')}
+<div class="callout"><h4>Naming matters</h4><p>Consistent, company-prefixed names — <code>CompanyNameOPENAI</code>, <code>CompanyNamePinecone</code>, <code>CompanyNameExternal</code> — keep the keys, knowledge base, and settings easy to match up in the dropdowns during the dense settings step.</p></div>`,
+    takeaways: [
+      "Under AI Tools → API Keys, add two keys: an OpenAI key and a Pinecone key + URL",
+      "Name everything with the company prefix so it's easy to select later",
+      "Initialize a knowledge base named CompanyNameExternal, with sharing left off"
+    ]
+  },
+  {
+    id: 3, group: "Build the Settings",
+    title: "Settings, part 1: Connect your AI",
+    time: "6 min",
+    objectives: [
+      "Open the four-part settings wizard and know it can't be reopened",
+      "Set the Connect screen: name, provider, key, model, and API method"
+    ],
+    body: `
+<h3>Step 5 — Create the settings</h3>
+<p>This is the dense, important part of the setup. From the agent, click <strong>Add New Settings</strong> to open a four-part wizard: <strong>Connect &rarr; Knowledge &rarr; Customize &rarr; Create</strong>. One heads-up: <strong>the wizard screens can't be reopened after you submit</strong>, so check everything before finalizing. (The good news: most values stay editable afterward on the settings screen.)</p>
+<h3>The Connect screen</h3>
+<p>There are six things to set here — the seventh, the all-important System Message, gets its own module next:</p>
+<ol>
+<li><strong>Name</strong> — <code>CompanyNameExternalSettings</code>.</li>
+<li><strong>Description</strong> — a short note; no programmatic effect.</li>
+<li><strong>AI provider</strong> — leave <strong>OpenAI</strong> (the default). Only switch to Gemini if the key you added in Step 3 was a Gemini key.</li>
+<li><strong>Key</strong> — choose the OpenAI key you added in Step 3.</li>
+<li><strong>Model</strong> — pick the most recent available (GPT-5, as of this writing).</li>
+<li><strong>API method</strong> — leave <strong>Chat Completion</strong>.</li>
+</ol>
+${eaShot('05-connect-screen.png','The Connect screen: Name, Description, AI provider (OpenAI), key, model, API method, and the System Message.')}`,
+    takeaways: [
+      "Add New Settings opens a four-part wizard (Connect → Knowledge → Customize → Create) that can't be reopened once submitted",
+      "On Connect: name it, leave OpenAI + Chat Completion, pick your OpenAI key and the newest model",
+      "Most settings remain editable afterward, even though the wizard screens don't"
+    ]
+  },
+  {
+    id: 4, group: "Build the Settings",
+    title: "The System Message: a client-specific agent",
+    time: "9 min",
+    objectives: [
+      "Understand why the System Message is the most important field",
+      "Use the adaptation prompt to turn the default into a client-specific message",
+      "Know what the rewrite must preserve vs. change"
+    ],
+    body: `
+<h3>Why the System Message matters most</h3>
+<p>The <strong>System Message</strong> is the single most important field in the whole setup — it defines how the agent behaves, and it's sent with <em>every</em> request, so it also drives cost. Commercient ships a default system prompt; your job is to adapt it into a finished, client-specific message. Don't write one from scratch, and don't ship the default.</p>
+<h3>How to build it</h3>
+<ol>
+<li>In the System Message field, select all and copy the default prompt (Ctrl+A, Ctrl+C).</li>
+<li>Open your LLM of choice — preferably <strong>Claude Opus 4.8+</strong>.</li>
+<li>Paste the default, then add the adaptation prompt below. It will first ask you for two inputs — the <strong>company name + website URL</strong>, and the <strong>agent's purpose</strong>. Provide them, and it returns a finished, paste-ready system message.</li>
+<li>Erase the default in the field, paste the new one, and click <strong>Next: Knowledge Base</strong>.</li>
+</ol>
+${eaShot('06-system-message.png','Adapt the default system message into a client-specific one before moving on.')}
+<div class="callout"><h4>What the rewrite preserves vs. changes</h4><p>It <strong>keeps the mechanics</strong> — the #### query delimiters, the tool/step sequence (identify tool &rarr; search the documents &rarr; clarify &rarr; final answer), the markdown requirement, and the exact <code>Sources:[doc_123]</code> format — because those are platform requirements. It <strong>changes</strong> the framing, scope, tone, and examples; adds an identity line, a company snapshot, a scope statement, an escalation path, and a no-results fallback; replaces the Commercient-internal examples with three realistic client ones; and keeps everything lean, since every token ships on every call.</p></div>
+<h3>The adaptation prompt</h3>
+<p>Paste the default system prompt into Claude, then this:</p>
+${eaPrompt(SYS_MSG_PROMPT)}`,
+    takeaways: [
+      "The System Message defines the agent's behavior and ships on every call — adapt the default, never write from scratch or ship the default",
+      "Use Claude (Opus 4.8+): paste the default, run the adaptation prompt, provide the company + purpose, paste the result back",
+      "The rewrite must preserve the mechanics (#### delimiters, step sequence, Sources:[] format) and change only framing, tone, and examples"
+    ]
+  },
+  {
+    id: 5, group: "Build the Settings",
+    title: "Settings, part 2: Knowledge, Customize & Create",
+    time: "5 min",
+    objectives: [
+      "Wire the knowledge base and keys on the Knowledge screen",
+      "Set the greeting and customize options",
+      "Review and save — knowing the wizard won't reopen"
+    ],
+    body: `
+<h3>The Knowledge screen</h3>
+<p>Leave the first field default; select the <strong>Pinecone key</strong> from Step 3; choose the <strong>knowledge base</strong> from Step 4; leave the next field default; select the <strong>OpenAI key</strong> from Step 3; leave the last field default; then click <strong>Next: Customize</strong>.</p>
+${eaShot('07-knowledge-base-screen.png','Knowledge screen: select the Pinecone key, the knowledge base, and the OpenAI key; leave the rest default.')}
+<h3>The Customize screen</h3>
+<p>Set the greeting — e.g., <em>"Hello, thank you for visiting [Company Name], what can I help you with today?"</em> The follow-up setting lets the agent ask clarifying follow-up questions (and caps how many). Keep <strong>Powered by Commercient</strong> on; stop-generation and clear-chat are optional toggles.</p>
+<h3>Review &amp; Create</h3>
+<p>Click <strong>Review &amp; Create</strong>, check everything, and <strong>Save</strong>. Remember: these four wizard screens won't be accessible again, but most of the settings remain editable afterward. Once saved, the settings customization screen refreshes.</p>
+${eaShot('08-customize-review.png','Set the greeting and options, then Review & Create → Save.')}`,
+    takeaways: [
+      "On Knowledge: pick the Pinecone key, the knowledge base, and the OpenAI key; leave the rest default",
+      "On Customize: set the greeting, keep \"Powered by Commercient\" on, treat the rest as optional",
+      "Review & Create → Save; the wizard won't reopen, but most settings stay editable"
+    ]
+  },
+  {
+    id: 6, group: "Advanced Settings",
+    title: "Advanced settings: LLM, VectorDB, UI & guardrails",
+    time: "8 min",
+    objectives: [
+      "Switch to the Advanced view and handle the save-resets-to-Simple quirk",
+      "Tune the LLM settings that matter (temperature, follow-ups)",
+      "Set the UI to the client's brand and enable lead capture"
+    ],
+    body: `
+<h3>Switch to Advanced</h3>
+<p>The refreshed screen has <strong>Simple</strong> and <strong>Advanced</strong> views. Customers usually stay in Simple (less to overwhelm them), but the most powerful and necessary adjustments live in <strong>Advanced</strong> — toggle to it. Set the name and description, ignore Share, and <strong>Save</strong>.</p>
+<div class="callout"><h4>A quirk to expect</h4><p>Each time you save a setting, the view flips back to Simple and forwards you to LLM Settings. <strong>Re-toggle Advanced before continuing</strong> every time. (Engineers are addressing this.)</p></div>
+<h3>LLM settings</h3>
+<p>Most fields stay default. Two are worth knowing: <strong>Temperature</strong> is the creativity dial — closer to 0 means the agent "makes things up" less, but going too low can actually lower its answer success rate, so don't reflexively bottom it out. And set <strong>max follow-ups / tool iterations to 5</strong>. Save.</p>
+${eaShot('09-llm-settings.png','LLM settings: mostly defaults; mind temperature, and set follow-ups to 5.')}
+<h3>VectorDB settings</h3>
+<p>Three screens, almost entirely defaults. One field is <strong>required</strong> and is provided together with your Pinecone key by your platform contact. Leave everything else default.</p>
+${eaShot('10-vectordb-settings.png','VectorDB settings: nearly all default; one required field comes with the Pinecone key.')}
+<h3>UI settings</h3>
+<p>This is where the chat takes on the client's look. Set the agent's chat title and header text, a short subtitle (e.g., <em>"Access a wealth of information with our AI agent"</em>), and an error message pointing to the client's support number. Upload the images: the user icon, the AI-response icon, the header image, and the minimized <strong>bubble icon</strong> (the corner icon, like Charlie's). Optionally turn on suggested prompts. Under feedback, keep thumbs up/down on and list the email(s) that should receive reports (mind the list format). <strong>Lead capture</strong> is one of the most-wanted features — add the customer's emails so they're notified when someone interacts with the chat.</p>
+${eaShot('11-ui-settings.png','UI settings: titles, subtitle, error message, and the icons/images including the corner bubble icon.')}
+${eaShot('12-ui-settings-2.png','More UI settings: feedback reports and lead capture — add the notification emails to alert the customer.')}
+<h3>Group chat &amp; guardrails</h3>
+<p>Turn <strong>group chat off</strong>. The <strong>guardrails</strong> defaults are good — leave them.</p>`,
+    takeaways: [
+      "Toggle to Advanced for the important settings; it reverts to Simple after every save, so re-toggle each time",
+      "LLM: keep defaults, but don't over-lower temperature (too low can hurt answers) and set follow-ups to 5",
+      "UI: brand the chat and enable lead capture (notification emails); group chat off, guardrails default"
+    ]
+  },
+  {
+    id: 7, group: "Deploy & Demo",
+    title: "Deploy: public key & chatbot",
+    time: "6 min",
+    objectives: [
+      "Generate the agent's public key and store it safely",
+      "Create the chatbot deployment and attach the settings + key"
+    ],
+    body: `
+<h3>Step 6 — Generate the public key</h3>
+<p>Generate a public key for the agent. Description: <code>CompanyName External Agent</code>. Log in as the admin user you're already using, leave <strong>expiration</strong> and <strong>allowed domains</strong> blank, and click <strong>Generate</strong>. <strong>Copy it somewhere safe immediately</strong> — you may not be able to retrieve it again, and you'll need it in the next steps.</p>
+${eaShot('13-generate-public-key.png','Generate the public key; copy it into a safe place right away — it may not be retrievable later.')}
+<h3>Step 7 — Create the chatbot</h3>
+<p>Create the deployment: name <code>CompanyNameExternal</code>, a brief description, deploy type <strong>Chatbot</strong>. Open it via the three dots &rarr; <strong>More Detail</strong>. Set <strong>AI Settings</strong> to the settings you built in Step 5, add a description, and <strong>Save</strong>. On the <strong>Chatbot</strong> tab: keep the first toggle on, choose the key you just created, and paste its value.</p>
+${eaShot('14-create-chatbot.png','Create the Chatbot deployment, set AI Settings to your Step 5 settings, choose the key, and paste its value.')}
+<div class="callout"><h4>Two ways to make the key</h4><p>You can generate the public key here on the Chatbot tab instead of in Step 6. If you already generated it in Step 6, just ignore that button and paste the value you saved.</p></div>`,
+    takeaways: [
+      "Generate the public key with expiration and allowed domains blank, and copy it immediately — it may not be retrievable later",
+      "Create a Chatbot deployment, set AI Settings to your Step 5 settings, and attach the key + value",
+      "The key can be generated in Step 6 or on the Chatbot tab — do it once, either place"
+    ]
+  },
+  {
+    id: 8, group: "Deploy & Demo",
+    title: "Deploy: build & test the demo page",
+    time: "6 min",
+    objectives: [
+      "Copy the embed script exactly",
+      "Use the demo prompt to build a realistic client demo page",
+      "Test the widget and troubleshoot if it doesn't appear"
+    ],
+    body: `
+<h3>Get the embed script</h3>
+<p>Once you paste the key, the <strong>embed script</strong> beneath the fields updates. That script is what goes on a webpage to render the agent. Copy it exactly.</p>
+${eaShot('15-embed-script.png','After pasting the key, the embed script updates — copy the whole script tag verbatim.')}
+<h3>Build a demo page with Claude</h3>
+<p>To show the client their agent in a realistic setting, take the embed script to Claude and have it build a single-file mock of the client's website with the widget embedded. Paste the script, then give Claude the demo prompt below. The rules that matter most:</p>
+<ul>
+<li><strong>The embed script is sacred</strong> — copy the entire <code>&lt;script&gt;</code> tag verbatim, right before <code>&lt;/body&gt;</code>. Never retype the <code>data-chatbot-id</code>, <code>data-public-key</code>, or <code>data-bubble-icon</code> values; copy, never transcribe (they're long opaque strings and hand-typing corrupts them).</li>
+<li><strong>No fake widget</strong> — don't add a second bubble or a mock chat window. The real widget renders itself in its corner; the page must not compete with it.</li>
+<li><strong>Match the real brand</strong> — real colors, logo (recreated in SVG/CSS, never hotlinked), nav, headline, categories, and CTA. One self-contained .html file, inline CSS, no external assets, responsive, nothing overlapping the widget's corner.</li>
+</ul>
+<div class="callout"><h4>If the widget doesn't appear</h4><p>Opening straight from disk (file://) can block it. Serve locally with <code>python3 -m http.server 8000</code> and load <code>http://localhost:8000/&lt;filename&gt;</code>.</p></div>
+<h3>The demo-page prompt</h3>
+<p>Paste the embed script into Claude, then this:</p>
+${eaPrompt(DEMO_PROMPT)}`,
+    takeaways: [
+      "Copy the updated embed script verbatim — never retype the data-chatbot-id / data-public-key / data-bubble-icon values",
+      "Use the demo prompt to build a single-file, on-brand client page with the real widget (no fake or second widget)",
+      "If the widget doesn't show from file://, serve locally with python3 -m http.server 8000"
+    ]
+  }
+];
+
+const EXTERNAL_AGENT_CHECKS = {
+  1: { q: "Where does the bulk of external-agent setup actually take place?",
+       a: ["Entirely inside the Commercient employee instance, from the first step to the last",
+           "In the customer's own instance, after the Sync Agent is turned on from the employee instance",
+           "Directly on the customer's website server, through an uploaded configuration file",
+           "Inside the OpenAI dashboard, which then pushes the finished agent to the customer"], c: 1 },
+  2: { q: "Which two API keys do you add before building the agent?",
+       a: ["An OpenAI key and a Pinecone key (with its URL), both added under AI Tools",
+           "A Salesforce key and a HubSpot key, so the agent can reach the customer's CRM",
+           "A single Commercient master key that covers both the model and the database",
+           "A Google key and a Microsoft key, chosen to match the customer's email provider"], c: 0 },
+  3: { q: "On the Connect screen, what should the AI provider be set to?",
+       a: ["Whichever provider the customer's own website happens to have been built on",
+           "Gemini, since it is the default and the more cost-effective of the two",
+           "OpenAI (the default) — pick Gemini only if the key you added was Gemini",
+           "It rotates automatically between OpenAI and Gemini on each incoming request"], c: 2 },
+  4: { q: "How should the agent's System Message be created?",
+       a: ["Written fresh for each client, from a blank field, with no starting template",
+           "Left exactly as the shipped default, since it already works for every client",
+           "Adapted from the default via an LLM into a client-specific message, keeping the mechanics",
+           "Generated automatically by the portal from the company's website URL alone"], c: 2 },
+  5: { q: "On the Customize screen, what should happen with \"Powered by Commercient\"?",
+       a: ["It should stay on; the greeting is set here and most other toggles are optional",
+           "It should be turned off so the agent looks fully native to the customer",
+           "It only appears after the agent has answered its first hundred questions",
+           "It controls whether the agent can ask follow-up questions during a chat"], c: 0 },
+  6: { q: "What's the right read on the Temperature setting in LLM settings?",
+       a: ["Always set it to 0.00, because a lower temperature is strictly better for accuracy",
+           "Lower means less making-things-up, but going too low can actually reduce answer success",
+           "It sets the maximum number of follow-up questions the agent is allowed to ask",
+           "It should be maxed out so the agent is as helpful and creative as possible"], c: 1 },
+  7: { q: "Right after you generate the agent's public key, what should you do?",
+       a: ["Wait for it to be emailed to the admin user listed on the generation screen",
+           "Set an expiration date and an allowed-domains list before it can be used",
+           "Copy it somewhere safe immediately — you may not be able to retrieve it again",
+           "Regenerate it twice more, since only the third key issued is the valid one"], c: 2 },
+  8: { q: "What's the rule for the embed script when building the demo page?",
+       a: ["Copy the entire script tag verbatim; never retype its data-chatbot-id or data-public-key values",
+           "Retype it cleanly and reindent it so the demo file stays tidy and readable",
+           "Add a second, simulated chat bubble next to it so the demo clearly shows a chat",
+           "Shorten the long attribute values to keep the demo file small and quick to load"], c: 0 }
+};
+EXTERNAL_AGENT_MODULES.forEach(m => { m.check = EXTERNAL_AGENT_CHECKS[m.id]; });
+
+const EXTERNAL_AGENT_QUIZ = {
+  passMark: 0.8,
+  sections: ["Prep, keys & knowledge base", "Building the settings", "Deploy & demo"],
+  questions: [
+    { s:0, q:"What is a Commercient external agent?",
+      a:["A customer-facing AI chat on the customer's website that answers from their own content",
+         "An internal tool Commercient staff use to reset a customer's data sync",
+         "A background service that copies the customer's CRM into a spreadsheet nightly",
+         "A replacement website that Commercient builds and hosts for the customer"] },
+    { s:0, q:"Before the customer-instance work, what do you do in the employee instance?",
+      a:["Generate the public key and the embed script for the customer's site",
+         "Turn on the CommercientAISyncAgent and wait for its status to read \"Installed\"",
+         "Upload the customer's brand colors and logo for the chat widget",
+         "Write the client-specific system message and paste in the API keys"] },
+    { s:0, q:"Which two keys are added under AI Tools → API Keys?",
+      a:["A Salesforce key and a HubSpot key for CRM access",
+         "One Commercient master key plus one backup recovery key",
+         "An OpenAI key and a Pinecone key (with its URL)",
+         "A billing key and a domain-verification key"] },
+    { s:0, q:"Why use a company-prefixed naming convention for keys and the knowledge base?",
+      a:["It's required or the portal will reject the key when you try to save it",
+         "It keeps them easy to match up in the dropdowns during the settings step",
+         "It automatically links the agent to the customer's billing account",
+         "It shortens the values so they cost fewer tokens on each call"] },
+    { s:1, q:"What's true about the four-part settings wizard?",
+      a:["It can be reopened and re-run any time you want to change something",
+         "It can't be reopened after you submit, though most settings stay editable afterward",
+         "It saves automatically after each field, so there's no final review step",
+         "It must be completed inside the employee instance, not the customer's"] },
+    { s:1, q:"How is the client-specific System Message produced?",
+      a:["The default is left untouched because it already fits every client",
+         "It's typed from scratch for each client with no reference to the default",
+         "The default is adapted via an LLM, preserving its mechanics and changing framing/examples",
+         "The portal writes it automatically from the customer's Pinecone index"] },
+    { s:1, q:"Which elements must the System-Message rewrite keep unchanged?",
+      a:["The #### delimiters, the step sequence, and the exact Sources:[] format — platform requirements",
+         "The five internal Commercient examples about sync resets and Salesforce exports",
+         "The default's generic tone and framing, so every agent sounds the same",
+         "Nothing — the whole default should be replaced with fresh client content"] },
+    { s:1, q:"After the settings wizard, why switch from Simple to Advanced?",
+      a:["Advanced is required before the agent can be saved at all",
+         "Simple hides the customer's branding options and Advanced restores them",
+         "The most powerful, necessary adjustments live in the Advanced view",
+         "Advanced is the only view where you can enter the API keys"] },
+    { s:1, q:"What should you know about saving in the Advanced view?",
+      a:["Saving locks the settings so they can't be edited again afterward",
+         "It flips the view back to Simple each time, so re-toggle Advanced to continue",
+         "It publishes the agent live to the customer's site immediately",
+         "It clears the system message, which then has to be pasted back in"] },
+    { s:2, q:"Right after generating the public key, the safest move is to:",
+      a:["Leave it in the portal, since it can always be looked up again later",
+         "Email it to the customer so they have a copy for their records",
+         "Copy it somewhere safe immediately — it may not be retrievable again",
+         "Set a short expiration on it so it can't be misused before launch"] },
+    { s:2, q:"When Claude builds the demo page, how is the embed script handled?",
+      a:["Copied verbatim before </body>; its data-chatbot-id and data-public-key are never retyped",
+         "Retyped and reformatted so the demo file stays clean and consistent",
+         "Paired with a second mock chat bubble so the demo obviously shows a chat",
+         "Trimmed down, dropping the long attribute values to keep the file small"] },
+    { s:2, q:"If the widget doesn't appear when you open the demo file, you should:",
+      a:["Regenerate the public key, since a missing widget means the key expired",
+         "Add a simulated chat window so the client still sees something working",
+         "Serve it locally with python3 -m http.server 8000 and load it over http://localhost",
+         "Hotlink the customer's real logo so the page finishes loading the widget"] }
+  ]
+};
+
+const EXTERNAL_AGENT_COURSE = {
+  id: "external-agent",
+  status: "available",
+  title: "External Agent Setup Certification",
+  tagline: "Stand up a customer's website AI agent end to end — keys, knowledge base, settings, the client-specific system message, deploy, and a live demo page.",
+  audience: "Commercient team members & implementation partners who set up external agents",
+  estTime: "~50 minutes",
+  icon: "assets/commercient-icon.png",
+  badge: {
+    name: "External Agent Setup Certified",
+    blurb: "Certified to set up a Commercient external (website) agent end to end — from keys and knowledge base to a live, embedded demo.",
+    img: "assets/badge-external-agent.png"
+  },
+  skills: ["AI Agents", "Conversational AI", "Software Deployment", "Prompt Engineering", "Solution Implementation"],
+  payoff: "Turn the external-agent setup from tribal knowledge into a repeatable skill: every step, every screen, and the two Claude prompts that do the heavy lifting — so you can hand a customer a working, on-brand website agent.",
+  payoffShort: "Set up a customer's website agent end to end — keys to live demo.",
+  brag: "I'm certified to set up Commercient External Agents — from keys and knowledge base to a live, embedded demo page.",
+  groups: [
+    { name: "Before You Start", modules: [1] },
+    { name: "Keys & Knowledge Base", modules: [2] },
+    { name: "Build the Settings", modules: [3, 4, 5] },
+    { name: "Advanced Settings", modules: [6] },
+    { name: "Deploy & Demo", modules: [7, 8, "quiz"] }
+  ],
+  roadmap: [
+    { step: 1, title: "Before you start", desc: "What an external agent is, turning on the Sync Agent, and getting into the customer instance." },
+    { step: 2, title: "Keys & knowledge base", desc: "Add the OpenAI and Pinecone keys and initialize the knowledge base." },
+    { step: 3, title: "Build the settings", desc: "The Connect screen, the client-specific system message, and the Knowledge/Customize screens." },
+    { step: 4, title: "Advanced settings", desc: "LLM, VectorDB, UI branding, lead capture, and guardrails." },
+    { step: 5, title: "Deploy & demo", desc: "Generate the public key, create the chatbot, and build a live demo page." },
+    { step: 6, title: "Get certified", desc: "Pass the quiz and earn the External Agent Setup Certified badge." }
+  ],
+  learn: [
+    "Turn on the Commercient AI Sync Agent and work inside the customer instance.",
+    "Add the OpenAI and Pinecone keys and initialize the knowledge base with clean naming.",
+    "Complete the settings wizard, including a client-specific system message adapted from the default.",
+    "Tune the advanced LLM, VectorDB, and UI settings, and enable lead capture.",
+    "Generate the public key, create the chatbot, and build a live, on-brand demo page.",
+    "Use the two Claude prompts for the system message and the demo page correctly."
+  ],
+  modules: EXTERNAL_AGENT_MODULES,
+  quiz: EXTERNAL_AGENT_QUIZ
+};
+
+
 const COURSES = [
   {
     id: "fluency",
@@ -2130,6 +2568,7 @@ const COURSES = [
     modules: CUSTOMER_PANEL_MODULES,
     quiz: CUSTOMER_PANEL_QUIZ
   },
+  EXTERNAL_AGENT_COURSE,
   {
     id: "web-agent",
     status: "coming-soon",
