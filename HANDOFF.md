@@ -7,6 +7,37 @@ A static-frontend **multi-course certification LMS** ("Commercient Academy") bac
 
 ---
 
+## 0. Portal integration & the content pipeline — READ FIRST (for the dev team / Aaron)
+
+_This section supersedes any earlier "hosting" notes below. It captures how the Academy plugs into the Commercient admin panel and — critically — how Nick keeps updating content without becoming (or waiting on) a bottleneck._
+
+### How users reach it
+The Academy lives inside the **Commercient admin panel** — the single portal where customers, partners, and employees all sign in. A user signs into the panel with their **existing Commercient credentials** and opens their own Academy instance from the panel with **no second sign-in**. So: auth = **Commercient SSO** (the magic-link/Supabase auth in `backend.js` is a dev stand-in, meant to be swapped out — it's isolated to the auth section of the adapter). Per-user progress and earned credentials should be **native records tied to the user's Commercient identity**.
+
+### Two ways to host it — the dev team's call
+Nick will hand over the built front end (HTML/CSS/JS) + content. Pick the integration depth:
+1. **Native** — mount/rebuild the Academy inside the admin panel's own app. Most tightly integrated, but it couples every content change to the portal's release cycle (see the bottleneck note — mitigate with the content store).
+2. **Standalone + reroute (recommended for content velocity)** — host the Academy as its own app on `commercient.com` (e.g. `/academy` or `academy.commercient.com`); the panel **links/reroutes** to it with an SSO handoff. Preserves the design 1:1 and keeps it independently deployable. Nick can hand the files straight to Aaron for this.
+
+Either way: **keep this design** (don't reskin it into the admin-panel look — the distinct look is deliberate) and use SSO so there's no second login.
+
+### The content pipeline — this must NOT bottleneck on the dev team
+Nick authors content and will keep adding/updating courses continuously. He can build pages and content, but he does **not** have production deploy access — today he must hand builds to someone to deploy. **Goal: make Nick's content changes self-serve.** The move is to decouple *content* from *deploy*:
+
+- **Today's shape:** all course copy is one file (`data.js`); images are files in `assets/`; quiz **answer keys are rows in Supabase `quiz_keys`** (deliberately server-side so learners can't read them). Changing content = edit `data.js` (± an image ± a key). Whether that's self-serve depends entirely on how it's deployed.
+
+- **Recommended — "Nick's push is the deploy" (pairs with the Standalone option).** Put the Academy in a Git repo (already at `github.com/nickrulon/commercient-academy`) wired to **auto-deploy on push to `main`** (Netlify/Vercel/any static CI). Nick edits `data.js` (with Claude) + drops images in `assets/`, commits, pushes → **live in ~1 minute, no dev in the loop.** This converts "deploy" into something Nick can already do (git), removing the human bottleneck **without** giving him portal backend access. Dev involvement drops to a one-time setup + rare app-shell changes.
+
+- **If hosted Native — externalize content so Nick still self-serves.** Move course content out of `data.js` into a data store Nick can write to (a `course_content` JSON table, fetched by the app at runtime) and add a small **admin-only "Author" page** in the Academy where Nick pastes/uploads updated course JSON + images and hits **Publish** → live, no code deploy. Answer keys can live in the same table behind RLS (server-side grading reads them; they never reach the browser), so even quiz edits stay self-serve. Dev builds the fetch + author page once; after that Nick owns content end to end.
+
+- **Fallback — clean batch submission (until a self-serve path exists).** Nick edits `data.js` + assets, commits to a branch, opens a **PR** (all self-serve). The dev team's only step is a ~2-minute review-and-merge (which auto-deploys, or they deploy). Reviewable diffs, no rebuilds, weekly cadence.
+
+**Decide the content-update path *with* the hosting decision — they're linked.** Native embedding with no content store = a permanent dev bottleneck; standalone + auto-deploy (or native + Author page) = Nick self-serves. The same pattern (a repo Nick can push to + auto-deploy, or a small CMS) solves the identical problem Nick has updating the `commercient.com` website.
+
+**Non-negotiable:** whatever the pipeline, keep quiz answer keys **out of the shipped client code** (protected DB column or the SQL step) — server-side grading only.
+
+---
+
 ## 1. Location & run
 
 **Project root (local):**
