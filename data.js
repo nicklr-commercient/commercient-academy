@@ -2063,7 +2063,7 @@ const EXTERNAL_AGENT_MODULES = [
     body: `
 <h3>What an external agent is</h3>
 <p>A Commercient <strong>external agent</strong> is a customer-facing AI assistant that lives on a customer's website — the chat bubble in the corner, the same way Charlie sits in the corner of the Commercient site. It answers visitors from the customer's own website content and documentation, links them to the right pages, and nudges them toward a conversion action like a quote or a contact. This course walks the full setup, end to end.</p>
-<div class="callout"><h4>Who this course is for</h4><p>This is a hands-on runbook for the Commercient team members and implementation partners who stand up external agents for customers. Several steps happen inside Commercient's own instances and need staff access.</p></div>
+<div class="callout"><h4>Who this course is for</h4><p>This is a hands-on runbook for anyone who stands up external agents for customers — partners, consultants, developers, and the Commercient team. A few early steps run inside Commercient instances; if you don't have that access yet, coordinate with your Commercient contact.</p></div>
 <h3>Step 1 — Turn on the Commercient AI Sync Agent</h3>
 <p>From <strong>within the Commercient employee instance</strong> (not the customer's), open <strong>Product</strong> and search <strong>"AI."</strong> Select <strong>"CommercientAISyncAgent,"</strong> leave the name at its default, and click <strong>Create</strong>. Refresh the page until the status reads <strong>"Installed."</strong></p>
 ${eaShot('01-turn-on-sync-agent.png','Product &rarr; search "AI" to find the Commercient AI Sync Agent.')}
@@ -2384,7 +2384,7 @@ const EXTERNAL_AGENT_COURSE = {
   status: "available",
   title: "External Agent Setup Certification",
   tagline: "Stand up a customer's website AI agent end to end — keys, knowledge base, settings, the client-specific system message, deploy, and a live demo page.",
-  audience: "Commercient team members & implementation partners who set up external agents",
+  audience: "Partners, consultants, developers & the Commercient team who deploy website agents",
   estTime: "~50 minutes",
   icon: "assets/commercient-icon.png",
   badge: {
@@ -2393,8 +2393,8 @@ const EXTERNAL_AGENT_COURSE = {
     img: "assets/badge-external-agent.png"
   },
   skills: ["AI Agents", "Conversational AI", "Software Deployment", "Prompt Engineering", "Solution Implementation"],
-  payoff: "Turn the external-agent setup from tribal knowledge into a repeatable skill: every step, every screen, and the two Claude prompts that do the heavy lifting — so you can hand a customer a working, on-brand website agent.",
-  payoffShort: "Set up a customer's website agent end to end — keys to live demo.",
+  payoff: "Learn the external-agent setup once and it becomes a repeatable, billable skill — every step, every screen, and the two Claude prompts that do the heavy lifting, so you can hand a customer a working, on-brand website agent.",
+  payoffShort: "Learn it once, then deploy on-brand website agents for customer after customer.",
   brag: "I'm certified to set up Commercient External Agents — from keys and knowledge base to a live, embedded demo page.",
   groups: [
     { name: "Before You Start", modules: [1] },
@@ -2569,23 +2569,6 @@ const COURSES = [
     quiz: CUSTOMER_PANEL_QUIZ
   },
   EXTERNAL_AGENT_COURSE,
-  {
-    id: "web-agent",
-    status: "coming-soon",
-    title: "Web Agent Deployment Certification",
-    tagline: "Learn to set up and deploy a Commercient web agent in about 10 hours — then bill 20–30 customers for it.",
-    audience: "The fastest money path — partners, consultants & developers",
-    estTime: "~10 hours",
-    icon: "assets/commercient-icon.png",
-    badge: {
-      name: "Web Agent Deployer",
-      blurb: "Certified to deploy production web agents on customer sites."
-    },
-    skills: ["AI Agents", "Conversational AI", "Software Deployment", "Artificial Intelligence (AI)", "Web Development"],
-    payoff: "Learn this once, then deploy it for 20–30 customers and bill every one — the highest-leverage skill in the catalog.",
-    payoffShort: "Learn it once, deploy it for 20–30 customers, bill every one.",
-    note: "Content in development with our deployment SMEs. Want early access? Ask your Commercient contact."
-  },
   {
     id: "ai-admin",
     status: "coming-soon",
