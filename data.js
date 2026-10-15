@@ -2569,6 +2569,7 @@ const COURSES = [
     quiz: CUSTOMER_PANEL_QUIZ
   },
   EXTERNAL_AGENT_COURSE,
+  IMPLEMENTATION_COURSE,
   {
     id: "ai-admin",
     status: "coming-soon",

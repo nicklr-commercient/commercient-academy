@@ -9,3 +9,16 @@ deploy.zip
 # Editor/local
 .vscode/
 .idea/
+.claude/
+
+# Local working material — never deploy
+Claude outputs/
+_deploy/
+
+# Build output (Cloudflare Pages builds this from scripts/build-dist.sh)
+dist/
+
+# Videos are too big for git and the static host — they live on YouTube
+# (unlisted) and are linked from IMPL_VIDEOS. Local copies stay local.
+assets/**/*.mp4
+assets/**/*.mov

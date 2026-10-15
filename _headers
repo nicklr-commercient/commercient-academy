@@ -1,0 +1,19 @@
+# Cloudflare Pages headers (copied into dist/ by scripts/build-dist.sh).
+# HTML/JS/CSS revalidate on every load (ETag makes unchanged files free), so
+# content updates show up immediately — no more stale-cache confusion.
+# Images cache for a day.
+
+/*
+  X-Content-Type-Options: nosniff
+
+/*.html
+  Cache-Control: no-cache
+
+/*.js
+  Cache-Control: no-cache
+
+/*.css
+  Cache-Control: no-cache
+
+/assets/*
+  Cache-Control: public, max-age=86400

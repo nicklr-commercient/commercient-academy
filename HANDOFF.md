@@ -38,6 +38,13 @@ Nick authors content and will keep adding/updating courses continuously. He can 
 
 ---
 
+## 0b. Implementation Training and Roadmap course (added 2026-10-08)
+- Lives in its own file, `implementation-course.js` (loaded before `data.js`; registered in `COURSES`). 15 modules: Start Here + one per meeting (I1–I3, P1-1–P1-5, P2-1–P2-6), 15 knowledge checks, 12-question quiz.
+- **Videos:** paste links into `IMPL_VIDEOS` at the top of that file (YouTube, Vimeo, Loom, Google Drive, or `assets/implementation/epNN.mp4`). Empty = "Video coming soon" placeholder.
+- **Badge:** drop `assets/badge-implementation.png` in; CSS disc fallback until then.
+- **Quiz key:** run `supabase/upgrade-007.sql` before learners take the quiz.
+- Web-team integration notes: `WEB-TEAM-INTEGRATION.md`.
+
 ## 1. Location & run
 
 **Project root (local):**
@@ -231,7 +238,7 @@ Deployed as the **public home**; portals link to it.
 - **Team ID:** `6a39834a180a1d0aba971697` (`nf_team_dev`)
 - **Deploys page (drag-drop target):** https://app.netlify.com/projects/commercient-academy/deploys
 
-**To deploy:** zip `index.html, verify.html, 404.html, config.js, backend.js, data.js, app.js, styles.css, assets/` (do **NOT** include `supabase/schema.sql` — it contains answer keys — nor `HANDOFF.md`/the stale single-file build) and drag onto the Deploys page. Bump `?v=` versions first (§9).
+**To deploy:** zip `index.html, verify.html, 404.html, config.js, backend.js, implementation-course.js, data.js, app.js, styles.css, assets/` (do **NOT** include `supabase/schema.sql` — it contains answer keys — nor `HANDOFF.md`/the stale single-file build) and drag onto the Deploys page. Bump `?v=` versions first (§9).
 
 **Supabase project:** `eswuflpckfoohrgnxhez` (Nick's account). Auth → URL Configuration: Site URL = the Netlify URL; `http://localhost:4137` allowed for local dev.
 
