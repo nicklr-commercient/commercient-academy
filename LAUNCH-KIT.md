@@ -14,24 +14,17 @@ content edits, commits, pushes, config flips, verification.
 
 ---
 
-## Part 1 — Connect Cloudflare Pages (~10 min, once)
+## Part 1 — Cloudflare Pages ✅ DONE (2026-10-15)
 
-1. Go to **dash.cloudflare.com** → Sign up with your work email (free plan).
-2. In the left sidebar: **Workers & Pages** → **Create** → **Pages** tab →
-   **Connect to Git**.
-3. Authorize GitHub when prompted, and select the repo
-   **nickrulon/commercient-academy**. (If it asks which repos to grant, just
-   grant that one.)
-4. Project name: **commercient-academy** — exactly that, so the URL is
-   `commercient-academy.pages.dev` and the Bhavesh message below is accurate.
-5. Build settings:
-   - Framework preset: **None**
-   - Build command: `bash scripts/build-dist.sh`
-   - Build output directory: `dist`
-6. Click **Save and Deploy**. ~1 minute later the site is live at
-   **https://commercient-academy.pages.dev**.
+Set up via the wrangler CLI instead of the dashboard Git integration. The
+project is **commercient-academy** on Nick's Cloudflare account
+(nickrulon@gmail.com, account `90375383…`), live at
+**https://commercient-academy.pages.dev**.
 
-From this moment, every push to `main` auto-deploys. The bottleneck is dead.
+Because it's a CLI (direct-upload) project, deploys happen from
+`scripts/publish.sh` (step 5 runs `wrangler pages deploy dist`) — a git push
+alone does not deploy. Same one-command result, no dashboard needed.
+`wrangler login` on this Mac is the stored credential.
 
 ## Part 2 — Tell Supabase about the new URL (~2 min, once)
 
@@ -89,8 +82,9 @@ Either tell Claude "publish the academy," or run:
 cd "/Users/nicklynn-rulon/App Projects/Commercient Partner Academy" && ./scripts/publish.sh "what changed"
 ```
 
-That syntax-checks the JS, rebuilds `dist/` locally to catch mistakes, commits,
-and pushes — live in ~1 minute. No zip files, no drag-drop, no dev team.
+That syntax-checks the JS, rebuilds `dist/`, commits, pushes to GitHub (the
+backup), and deploys to Cloudflare — live in ~1 minute. No zip files, no
+drag-drop, no dev team.
 
 **Safety rails built into the pipeline:**
 - `scripts/build-dist.sh` deploys an explicit **allowlist** — `supabase/`

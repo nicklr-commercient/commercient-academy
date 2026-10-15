@@ -22,3 +22,10 @@ dist/
 # (unlisted) and are linked from IMPL_VIDEOS. Local copies stay local.
 assets/**/*.mp4
 assets/**/*.mov
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
