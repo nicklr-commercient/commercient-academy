@@ -14,5 +14,12 @@ window.ACADEMY_CONFIG = {
   // URL: linkedin.com/company/<ID>/admin). When set, "Add to LinkedIn" links
   // the credential to the company page and shows the logo. Empty = free-text
   // organization name fallback.
-  LINKEDIN_ORG_ID: ""
+  LINKEDIN_ORG_ID: "",
+  // HubSpot lead capture (Commercient PRODUCTION portal — not the demo one).
+  // Academy sign-ups post to this form via the public Forms API; HubSpot
+  // dedupes by email. Both empty = feature off. Get these from the form's
+  // embed snippet after creating "Commercient Academy Registration" (fields:
+  // Email, First name, Last name, Company name) in Marketing → Forms.
+  HUBSPOT_PORTAL_ID: "",
+  HUBSPOT_FORM_GUID: ""
 };

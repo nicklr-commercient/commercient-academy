@@ -104,8 +104,32 @@ const Backend = (function(){
     return base + '/verify.html?id=' + encodeURIComponent(credId);
   }
 
+  /* ---------- marketing lead capture (HubSpot form, fire-and-forget) ----------
+     Posts Academy sign-ups to a HubSpot form via the public Forms API v3 —
+     no tokens or secrets involved; a form submission endpoint is public by
+     design. HubSpot dedupes by email, so firing at sign-in (email only) and
+     again at quiz registration (full name + company) upgrades one contact.
+     Disabled until HUBSPOT_PORTAL_ID + HUBSPOT_FORM_GUID are set in config.js.
+     MUST never block or break the learner flow — every failure is swallowed. */
+  function lead(fields){
+    try{
+      const c = cfg();
+      if(!c.HUBSPOT_PORTAL_ID || !c.HUBSPOT_FORM_GUID || !fields || !fields.email) return;
+      const url = 'https://api.hsforms.com/submissions/v3/integration/submit/'
+                + c.HUBSPOT_PORTAL_ID + '/' + c.HUBSPOT_FORM_GUID;
+      const map = { email: 'email', first: 'firstname', last: 'lastname', company: 'company' };
+      const payload = {
+        fields: Object.keys(map).filter(k => fields[k])
+                  .map(k => ({ objectTypeId: '0-1', name: map[k], value: fields[k] })),
+        context: { pageUri: (c.SITE_URL || location.origin) + '/', pageName: 'Commercient Academy' }
+      };
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                   body: JSON.stringify(payload) }).catch(()=>{});
+    }catch(e){ /* lead capture must never break the app */ }
+  }
+
   return { init, enabled, user, profile, refreshProfile, onChange,
            signIn, signOut, fetchProgress, pushProgress,
-           gradeQuiz, fetchCredentials, verifyUrl };
+           gradeQuiz, fetchCredentials, verifyUrl, lead };
 })();
 window.Backend = Backend; // top-level const doesn't create a window property

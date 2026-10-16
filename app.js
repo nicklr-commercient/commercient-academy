@@ -612,6 +612,7 @@
       try{ localStorage.setItem('cpa_next', toHash(lastGo==='signin' ? 'home' : lastGo)); }catch(e){}
       try{
         await Backend.signIn(email);
+        Backend.lead({ email }); // marketing lead capture — fire-and-forget
         ok.textContent = '✓ Check your inbox — click the link in the email to sign in.'; ok.classList.remove('hide');
         btn.textContent = 'Link sent';
       }catch(e){
@@ -667,6 +668,7 @@
       const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       if(!first||!last||!company||!emailOk){ document.getElementById('rfErr').classList.remove('hide'); return; }
       st().reg = {first,last,company,email}; save();
+      Backend.lead({ email, first, last, company }); // upgrades the lead with full details
       renderQuiz();
     });
     bindGo(); renderSidebarCourse('quiz'); window.scrollTo(0,0);
