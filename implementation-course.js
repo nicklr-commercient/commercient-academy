@@ -62,7 +62,7 @@ ${implVideo(1, 'Episode 0 · Start Here')}
 <li><strong>Customer 2: you lead.</strong> You run the meetings, with Commercient supporting every step.</li>
 <li><strong>Customer 3: you run it.</strong> Commercient is there when you need it.</li></ol>
 <h3>Before your first customer meeting</h3>
-<p>You can't join customer meetings or get system logins until you've <strong>completed CGI onboarding</strong>, <strong>signed the NDA</strong>, and, if the project needs one, <strong>signed a TPAF</strong>. Commercient's partner team walks you through all three.</p>
+<p>You can't join customer meetings or get system logins until you've <strong>completed CGI onboarding</strong>, <strong>signed the NDA</strong>, and, if the project needs one, <strong>signed a TPAF</strong> (third-party authorization form). Commercient's partner team walks you through all three.</p>
 <h3>The roadmap: 14 meetings, three stages</h3>
 <p><strong>Installation</strong> (3 meetings) connects the ERP. <strong>Phase 1</strong> (5 meetings) brings ERP data into the CRM. <strong>Phase 2</strong> (6 meetings, when licensed) sends records the customer chooses back into the ERP. Every meeting produces something the next meeting depends on.</p>
 <p>Installation always comes first. <strong>Phase 1 and Phase 2 can overlap:</strong> once the first sync is verified and working, Phase 2 can run alongside Phase 1, if it's licensed and the customer agrees.</p>

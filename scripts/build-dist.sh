@@ -32,16 +32,14 @@ done
 cp -R assets dist/assets
 find dist -name '.DS_Store' -delete
 
-# Videos never ship to the static host (Cloudflare Pages caps files at 25MB).
-# Local mp4 paths in IMPL_VIDEOS are blanked in the DEPLOYED copy only, so the
-# module shows its "Video coming soon" placeholder until a YouTube/Vimeo/Loom
-# link is pasted in (local dev keeps playing the local files).
-nvids=$(find dist/assets -name '*.mp4' -o -name '*.mov' | wc -l | tr -d ' ')
-find dist/assets \( -name '*.mp4' -o -name '*.mov' \) -delete
-sed -i '' -E 's#"assets/[^"]+\.(mp4|mov)"#""#g' dist/implementation-course.js
-if [ "$nvids" -gt 0 ]; then
-  echo "NOTE: $nvids local video file(s) excluded from the deploy — paste hosted links (YouTube unlisted) into IMPL_VIDEOS to publish them."
-fi
+# Videos SHIP with the site (2026-10-20): every episode fits Cloudflare Pages'
+# 25MB/file limit (ep01 is a compressed delivery copy; the full-res original
+# lives in assets/implementation/superseded-2026-10-08/). The guard below
+# still fails the build if any future video exceeds the limit — compress it
+# or host it externally (IMPL_VIDEOS accepts YouTube/Vimeo/Loom/Drive links).
+# Superseded local backups never ship:
+rm -rf dist/assets/implementation/superseded-*
+find dist/assets -name '*.mov' -delete
 
 # Guard 1: nothing secret in dist
 if find dist \( -name '*.sql' -o -name 'HANDOFF*' -o -name '*.zip' \) | grep -q .; then
