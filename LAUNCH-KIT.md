@@ -37,20 +37,19 @@ Sign-in magic links only redirect to approved URLs.
 3. When the real domain lands (Part 4), add
    `https://academy.commercient.com/*` and set it as the **Site URL**.
 
-## Part 3 — Videos (before sharing the Implementation course)
+## Part 3 — Videos ✅ LIVE ON THE SITE (2026-10-20)
 
-The 15 implementation episodes are too big for git and the static host, so the
-deploy automatically shows "Video coming soon" placeholders until they're
-hosted properly.
+All 15 implementation episodes now ship with the deploy and stream directly
+from the site (every file fits Cloudflare's 25MB limit; ep01 is a compressed
+delivery copy — the full-res original is in
+`assets/implementation/superseded-2026-10-08/ep01-original-fullres.mp4`).
+Episodes 0, 2, 3, 4, 5, 9 are the Oct 20 re-cuts from the JJ review; their
+Oct 8 originals are in the same superseded folder.
 
-1. Upload the files in `assets/implementation/` to YouTube as **Unlisted**
-   (batch-select all 15 in YouTube Studio; titles = episode names).
-2. Paste each link into `IMPL_VIDEOS` at the top of
-   `implementation-course.js` (or hand Claude the 15 links — 2-minute job).
-3. Publish (Part 5). Local mp4s keep working for local preview either way.
-
-Until the YouTube copies exist, these mp4s live ONLY on this Mac — keep a copy
-in Drive if that makes you nervous.
+Optional later: move to YouTube Unlisted (paste links into `IMPL_VIDEOS` in
+`implementation-course.js` and publish) — gets analytics and lighter deploys,
+but is no longer required. Videos are gitignored; the Drive course folder and
+the superseded folder are the backups.
 
 ## Part 4 — The domain (the one thing only the company can do)
 
