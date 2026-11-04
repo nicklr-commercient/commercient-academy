@@ -3,7 +3,7 @@
 _Last updated 2026-10-15. This replaces the Netlify drag-drop workflow._
 
 **The architecture in three lines:** code + content live in the GitHub repo
-(`github.com/nickrulon/commercient-academy`). Cloudflare Pages (free, no usage
+(`github.com/nicklr-commercient/commercient-academy`). Cloudflare Pages (free, no usage
 credits, unlimited bandwidth) builds and serves the site on every push. The only
 thing the company ever provides is one DNS record pointing
 `academy.commercient.com` at it.

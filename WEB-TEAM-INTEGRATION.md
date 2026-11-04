@@ -5,7 +5,7 @@
 **Goal:** run the Academy inside the Commercient admin panel, using the panel's existing login. A signed-in panel user opens the Academy with no second sign-in, and their progress and credentials are stored against their panel user ID.
 
 **Live reference build:** https://commercient-academy.netlify.app
-**Source:** `github.com/nickrulon/commercient-academy` (private; ask Nick for access). `HANDOFF.md` in the repo has the full technical reference.
+**Source:** `github.com/nicklr-commercient/commercient-academy` (private). `HANDOFF.md` in the repo has the full technical reference.
 
 ---
 

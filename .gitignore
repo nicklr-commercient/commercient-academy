@@ -11,16 +11,14 @@ deploy.zip
 .idea/
 .claude/
 
-# Local working material — never deploy
-Claude outputs/
+# Old Netlify drag-and-drop copy — never deploy
 _deploy/
 
-# Build output (Cloudflare Pages builds this from scripts/build-dist.sh)
+# Build output (scripts/build-dist.sh regenerates it)
 dist/
 
-# Videos are too big for git and the static host — they live on YouTube
-# (unlisted) and are linked from IMPL_VIDEOS. Local copies stay local.
-assets/**/*.mp4
+# Course videos ARE tracked: they ship with the site, and each one is under
+# Cloudflare's 25MB file limit. Raw .mov sources stay local.
 assets/**/*.mov
 
 # wrangler files
