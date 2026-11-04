@@ -55,7 +55,7 @@ const IMPLEMENTATION_MODULES = [
       "Know how to use your prep hour before each meeting"
     ],
     body: `
-${implVideo(1, 'Episode 0 · Start Here')}
+${implVideo(1, 'Start Here')}
 <p>You'll learn to implement Commercient <strong>live, alongside the Commercient team,</strong> on a real customer project. This course supports that: one short video and outline per meeting, so you walk into each one knowing what it's for, what will happen, and what it should produce.</p>
 <h3>The three-customer ramp</h3>
 <ol><li><strong>Customer 1: you shadow.</strong> Commercient runs every meeting; you prepare for each one and take on small pieces.</li>
@@ -65,7 +65,7 @@ ${implVideo(1, 'Episode 0 · Start Here')}
 <p>You can't join customer meetings or get system logins until you've <strong>completed CGI onboarding</strong>, <strong>signed the NDA</strong>, and, if the project needs one, <strong>signed a TPAF</strong> (third-party authorization form). Commercient's partner team walks you through all three.</p>
 <h3>The roadmap: 14 meetings, three stages</h3>
 <p><strong>Installation</strong> (3 meetings) connects the ERP. <strong>Phase 1</strong> (5 meetings) brings ERP data into the CRM. <strong>Phase 2</strong> (6 meetings, when licensed) sends records the customer chooses back into the ERP. Every meeting produces something the next meeting depends on.</p>
-<p>Installation always comes first. <strong>Phase 1 and Phase 2 can overlap:</strong> once the first sync is verified and working, Phase 2 can run alongside Phase 1, if it's licensed and the customer agrees.</p>
+<p>Installation always comes first. <strong>Phase 1 and Phase 2 can overlap:</strong> once data matching is done and the key-field format is agreed, Phase 2 can run alongside Phase 1, if it's licensed and the customer agrees.</p>
 <h3>Your prep hour</h3>
 <ul><li>Watch that meeting's video.</li><li>Read its outline here.</li><li>Do one hands-on task, on a test system where you have one.</li><li>Bring one question.</li></ul>
 <h3>Your team</h3>
@@ -87,7 +87,7 @@ ${implVideo(1, 'Episode 0 · Start Here')}
       "Set sync frequency expectations with the customer"
     ],
     body: `
-${implVideo(2, 'Episode 1 · I1 Installation Discovery')}
+${implVideo(2, 'I1 Installation Discovery')}
 ${implGlance('Installation · 1 of 3', 'Yes', '~1 hour', 'Connection method + requirements checklist')}
 <h3>Why this meeting exists</h3>
 <p>To decide how Commercient connects to the customer's ERP, collect every requirement for that connection, and line up the customer's IT and ERP people.</p>
@@ -118,7 +118,7 @@ ${implGlance('Installation · 1 of 3', 'Yes', '~1 hour', 'Connection method + re
       "Keep an install record"
     ],
     body: `
-${implVideo(3, 'Episode 2 · I2 The Installation Session')}
+${implVideo(3, 'I2 The Installation Session')}
 ${implGlance('Installation · 2 of 3', 'Yes, live screen-share', '~1 hour', 'A verified connection; customer-approved record counts')}
 <h3>Why this meeting exists</h3>
 <p>To connect Commercient to the ERP and prove it works.</p>
@@ -149,7 +149,7 @@ ${implGlance('Installation · 2 of 3', 'Yes, live screen-share', '~1 hour', 'A v
       "Hand the project to the Phase 1 team"
     ],
     body: `
-${implVideo(4, 'Episode 3 · I3 Record Counts and the Handoff')}
+${implVideo(4, 'I3 Record Counts and the Handoff')}
 ${implGlance('Installation · 3 of 3', 'Yes', '~45 minutes', 'Approved record counts; the first customization list')}
 <h3>Why this meeting exists</h3>
 <p>The customer approves the record counts and gets a first look at their ERP data. Capture changes and hand off to Phase 1. It can also open the Phase 1 kickoff.</p>
@@ -177,7 +177,7 @@ ${implGlance('Installation · 3 of 3', 'Yes', '~45 minutes', 'Approved record co
       "Draft the matching plan"
     ],
     body: `
-${implVideo(5, 'Episode 4 · P1-1 Layout Training and the Phase 1 Kickoff')}
+${implVideo(5, 'P1-1 Layout Training and the Phase 1 Kickoff')}
 ${implGlance('Phase 1 · 1 of 5', 'Yes', '~1 hour', 'Validation result, customization list, matching plan')}
 <h3>Why this meeting exists</h3>
 <p>Phase 1 brings ERP data into the CRM. This kickoff validates the first records, shows the customer their configuration and logs, and captures what to customize and match.</p>
@@ -204,7 +204,7 @@ ${implGlance('Phase 1 · 1 of 5', 'Yes', '~1 hour', 'Validation result, customiz
       "Keep a dedup decision log"
     ],
     body: `
-${implVideo(6, 'Episode 5 · P1-2 Data Matching')}
+${implVideo(6, 'P1-2 Data Matching')}
 ${implGlance('Phase 1 · 2 of 5 (only when the CRM already has data)', 'Yes', '~1 hour', 'Existing CRM records linked to the ERP; CRM sync turned on')}
 <h3>Why this meeting exists</h3>
 <p>To link records already in the CRM to their ERP records with a <strong>key field</strong> before any ERP data flows into the CRM. <strong>Match first, then turn on the CRM sync.</strong> Turn it on first and it creates duplicates.</p>
@@ -231,7 +231,7 @@ ${implGlance('Phase 1 · 2 of 5 (only when the CRM already has data)', 'Yes', '~
       "Sort requests into self-serve vs. Commercient work"
     ],
     body: `
-${implVideo(7, 'Episode 6 · P1-3 The Personalization Session')}
+${implVideo(7, 'P1-3 The Personalization Session')}
 ${implGlance('Phase 1 · 3 of 5', 'No, internal working session', '~1 hour', 'Updated views, ready for the full sync')}
 <h3>Why this meeting exists</h3>
 <p>To build the customization list into the sync. You make the self-serve changes hands-on; Commercient's developers handle the rest.</p>
@@ -258,7 +258,7 @@ ${implGlance('Phase 1 · 3 of 5', 'No, internal working session', '~1 hour', 'Up
       "Route issues to the right owner"
     ],
     body: `
-${implVideo(8, 'Episode 7 · P1-4 Full Sync and User Testing')}
+${implVideo(8, 'P1-4 Full Sync and User Testing')}
 ${implGlance('Phase 1 · 4 of 5', 'Yes', '~45 minutes', "The customer's sign-off on the data")}
 <h3>Why this meeting exists</h3>
 <p>To get the green light, run the full sync (every licensed object and record, with history), and have the customer's users check the data.</p>
@@ -285,7 +285,7 @@ ${implGlance('Phase 1 · 4 of 5', 'Yes', '~45 minutes', "The customer's sign-off
       "Set the customer up to monitor their own sync"
     ],
     body: `
-${implVideo(9, 'Episode 8 · P1-5 Delivery and Handover')}
+${implVideo(9, 'P1-5 Delivery and Handover')}
 ${implGlance('Phase 1 · 5 of 5', 'Yes', '~45 minutes', 'Monitoring set up; Phase 1 delivered')}
 <h3>Why this meeting exists</h3>
 <p>To close Phase 1 and leave the customer able to watch their own sync, then move to Phase 2 if it's licensed.</p>
@@ -312,20 +312,24 @@ ${implGlance('Phase 1 · 5 of 5', 'Yes', '~45 minutes', 'Monitoring set up; Phas
       "Flag the Export New vs. Update gap early"
     ],
     body: `
-${implVideo(10, 'Episode 9 · P2-1 The Phase 2 Kickoff')}
+${implVideo(10, 'P2-1 The Phase 2 Kickoff')}
 ${implGlance('Phase 2 · 1 of 6', 'Yes', '~1 hour', 'The license review table')}
 <h3>Why this meeting exists</h3>
-<p>Phase 2 sends CRM records back into the ERP. A user ticks <strong>Commercient Import</strong> on a record; the next sync run creates it in the ERP; <strong>Commercient Completed</strong> and <strong>Commercient Message</strong> report the result. This kickoff confirms what gets built and sets the 2–10 week timeline.</p>
-<p><strong>Phase 2 doesn't have to wait for Phase 1 to finish.</strong> Once the first sync is verified and working, it can run alongside Phase 1, if it's licensed and the customer agrees.</p>
+<p>Phase 2 sends CRM records back into the ERP. This kickoff confirms what gets built and sets the 2–10 week timeline. Three fields on the CRM record control it:</p>
+<ul><li><strong>Commercient Import</strong>, a checkbox. By default a user ticks it by hand. If the customer wants, a CRM consultant can automate it with workflows so users never touch it.</li><li><strong>Commercient Completed</strong>, a text field, <em>not</em> a checkbox. It holds the text "true" or "false", and it's "false" only when there's an error, so customers often report on it.</li><li><strong>Commercient Message</strong>, a text field with the result: the new ERP ID, or the error.</li></ul>
+<p><strong>The pickup rule:</strong> a record is sent on the next sync run when Import is ticked <em>and</em> Completed and Message are both blank, plus any filters in the process's query. To send a record again, clear Completed and Message and tick Import. That's <strong>re-flagging</strong>. Completed and Message are each updated twice while a record is processed: once along the way, and once with the final result.</p>
+<p><strong>Phase 2 doesn't have to wait for Phase 1 to finish.</strong> It can run alongside Phase 1, if it's licensed and the customer agrees, once two things are done: <strong>data matching is complete</strong> (accounts, contacts and products, as the project needs) and <strong>the key-field format is agreed</strong>, so both phases write keys the same way. Without both, Phase 2 creates duplicates.</p>
 <h3>What happens</h3>
-<ol><li>How a record gets triggered.</li><li><strong>License review table:</strong> each process, its ERP object, CRM object and extra filters.</li><li>Processes on hold, confirmed in writing.</li><li>Templates vs. custom mapping; mirroring Phase 1 to avoid circular sync.</li><li>Next steps: configuration, internal testing (test records agreed), UAT document, live demo.</li></ol>
+<ol><li>How a record gets triggered: the three fields and the pickup rule. Ask whether users will tick Import by hand or the customer wants it automated.</li><li><strong>License review table:</strong> each process, its ERP object, CRM object and extra filters.</li><li>Processes on hold, confirmed in writing.</li><li>Templates vs. custom mapping; mirroring Phase 1 to avoid circular sync.</li><li>Next steps: configuration, internal testing (test records agreed), UAT document, live demo.</li></ol>
 <h3>Your prep hour</h3>
 <ul><li>Draft the license review table.</li><li>List objects that depend on existing ERP records. These depend on matching.</li></ul>
 <h3>What you walk out with</h3>
 <p>A final license table, on-hold items logged, the test-record approach agreed, and expectation gaps flagged.</p>
-<div class="callout"><h4>Watch out</h4><p>"Export New" processes create records; they don't update them later. Say so now if the customer expects updates.</p></div>`,
+<div class="callout"><h4>Watch out</h4><p>"Export New" processes create records; they don't update them later. Say so now if the customer expects updates.</p></div>
+<h3>Go deeper</h3>
+<ul><li><a href="https://portal.commercient.com/Article/316" target="_blank" rel="noopener">Help desk: how the Commercient fields update during Phase 2</a> (diagram of each stage)</li></ul>`,
     takeaways: [
-      "Phase 2 is triggered by the Commercient Import checkbox",
+      "Import ticked + Completed and Message blank = the record is sent",
       "The license review table defines every process",
       "Export New creates records; it doesn't update them"
     ]
@@ -340,12 +344,12 @@ ${implGlance('Phase 2 · 1 of 6', 'Yes', '~1 hour', 'The license review table')}
       "Protect the ERP with safe test filters"
     ],
     body: `
-${implVideo(11, 'Episode 10 · P2-2 Queries and Process Creation')}
+${implVideo(11, 'P2-2 Queries and Process Creation')}
 ${implGlance('Phase 2 · 2 of 6', 'No, internal working session', '~1 hour', 'Processes created, with safe test filters')}
-<h3>Why this meeting exists</h3>
+<h3>Why this session exists</h3>
 <p>To turn each row of the license table into a process: a <strong>query</strong> (which CRM records and fields) plus a <strong>DLL</strong> (the ERP operation, such as "create new customer").</p>
 <h3>What happens</h3>
-<ol><li>Query rules: the record ID goes first; the Commercient fields stay out.</li><li>Syntax by CRM: HubSpot is a field list plus the object name; Salesforce is SOQL; Dynamics is FetchXML.</li><li>Create the process and choose the DLL. The DLL decides which ERP fields you can map.</li><li>Add a safe test filter: never true, or a single test record ID.</li><li>HubSpot: enable with the safe filter and wait one sync run so the Commercient fields exist before loading fields.</li></ol>
+<ol><li>Query rules: the record ID goes first; the Commercient fields stay out. The sync adds its own pickup rule on top of your query.</li><li>Syntax by CRM: HubSpot is a field list plus the object name; Salesforce is SOQL; Dynamics is FetchXML.</li><li>Create the process and choose the DLL. The DLL decides which ERP fields you can map.</li><li><strong>Add a safe test filter</strong> to the query. A process sends every matching record on its next run, so before you switch one on, filter it so nothing real goes through: a condition that's never true while you build, or one that matches a single test record ID when you test. Loosen it only at go-live.</li><li><strong>HubSpot only:</strong> the sync creates the Commercient fields (Import, Completed, Message) the first time it runs an enabled process with a working query, and you can't load HubSpot fields for mapping until they exist. So enable the process with its safe filter, wait one sync run, then load the fields and map.</li></ol>
 <h3>Your prep hour</h3>
 <ul><li>Look up the internal (API) names for every field you need.</li><li>Draft one query.</li></ul>
 <h3>What you walk out with</h3>
@@ -367,12 +371,12 @@ ${implGlance('Phase 2 · 2 of 6', 'No, internal working session', '~1 hour', 'Pr
       "Check file mapping"
     ],
     body: `
-${implVideo(12, 'Episode 11 · P2-3 Mapping and Result Mapping')}
+${implVideo(12, 'P2-3 Mapping and Result Mapping')}
 ${implGlance('Phase 2 · 3 of 6', 'No, internal working session', '~1 hour', 'Mapped processes, ready to test')}
-<h3>Why this meeting exists</h3>
+<h3>Why this session exists</h3>
 <p>To map the fields so each process knows which CRM field fills which ERP field, then set up result mapping so Phase 1 doesn't create duplicates.</p>
 <h3>What happens</h3>
-<ol><li>Process mapping. Keys are case-sensitive.</li><li>Three ways to build it: <strong>Path A</strong> from scratch, <strong>Path B</strong> a template, <strong>Path C</strong> mirror the Phase 1 view.</li><li><strong>Result mapping:</strong> write the new ERP ID back to the CRM record in exactly the Phase 1 key format, so Phase 1 updates that record instead of creating a second one.</li><li>File mapping: set once per sync instance.</li></ol>
+<ol><li>Process mapping. Keys are case-sensitive.</li><li>Three ways to build it: <strong>Path A</strong> from scratch, <strong>Path B</strong> a template, <strong>Path C</strong> mirror the Phase 1 view.</li><li><strong>Result mapping:</strong> write the new ERP ID back to the CRM record in exactly the Phase 1 key format, so Phase 1 updates that record instead of creating a second one.</li><li><strong>File mapping</strong> (rarely needed): some ERPs need extra library files to run Phase 2. File mapping tells Commercient to download them on the next sync run. It's set once per sync instance, not per process; the ERP's help desk guide or a Commercient developer says which files, if any.</li></ol>
 <h3>Your prep hour</h3>
 <ul><li>Get the Phase 1 view and its key format.</li><li>Draft a mapping table: each required ERP field and the CRM field that fills it.</li></ul>
 <h3>What you walk out with</h3>
@@ -394,12 +398,12 @@ ${implGlance('Phase 2 · 3 of 6', 'No, internal working session', '~1 hour', 'Ma
       "Know when to reset and when to re-flag"
     ],
     body: `
-${implVideo(13, 'Episode 12 · P2-4 Internal Testing')}
+${implVideo(13, 'P2-4 Internal Testing')}
 ${implGlance('Phase 2 · 4 of 6', 'No, internal', '~45 minutes', 'Test evidence + the UAT document')}
-<h3>Why this meeting exists</h3>
+<h3>Why this session exists</h3>
 <p>To prove each process works, one test record at a time, without polluting real ERP data.</p>
 <h3>What happens</h3>
-<ol><li>Environment check: test or production ERP, sandbox or live CRM.</li><li>Turn on Download DLL and Text Log; enable processes with single-record filters.</li><li>Flag a test record and check three places: the CRM fields, the ERP record, the Logs status.</li><li>Statuses: <strong>Awaiting</strong>, <strong>Ready</strong>, <strong>Created</strong>, <strong>Success</strong>, <strong>Failed</strong>, <strong>Hold</strong> (contact support).</li><li>Work one failure: <strong>Reset</strong> retries the queued data; if you changed the CRM record, <strong>re-flag</strong> it instead.</li></ol>
+<ol><li>Environment check: test or production ERP, sandbox or live CRM.</li><li>Turn on <strong>Download DLL</strong> (delivers the ERP program each process uses; without it you get "DLL not found") and <strong>Text Log</strong> (a detailed daily log of every step). Enable the processes, still with single-record filters.</li><li>Flag a test record and check three places: the CRM fields, the ERP record, the Logs status.</li><li>Statuses: <strong>Awaiting</strong>, <strong>Ready</strong>, <strong>Created</strong>, <strong>Success</strong>, <strong>Failed</strong>, <strong>Hold</strong> (contact support).</li><li>Work one failure. <strong>Reset</strong> (in the Logs) retries the data already queued: use it when the problem was on the ERP side. If you changed the CRM record, <strong>re-flag</strong> it instead: clear Completed and Message and tick Import again.</li></ol>
 <h3>Your prep hour</h3>
 <ul><li>Write the single-record filter for each process.</li><li>Draft a test-record plan.</li></ul>
 <h3>What you walk out with</h3>
@@ -421,7 +425,7 @@ ${implGlance('Phase 2 · 4 of 6', 'No, internal', '~45 minutes', 'Test evidence 
       "Start the customer testing window"
     ],
     body: `
-${implVideo(14, 'Episode 13 · P2-5 The Live Demo and Initial Sign-off')}
+${implVideo(14, 'P2-5 The Live Demo and Initial Sign-off')}
 ${implGlance('Phase 2 · 5 of 6', 'Yes', '~45 minutes', 'Initial sign-off; a 2–3 week testing window')}
 <h3>Why this meeting exists</h3>
 <p>To show the customer the processes working live, train them on the customer panel, and open their testing window. Commercient sends the initial sign-off afterward.</p>
@@ -448,7 +452,7 @@ ${implGlance('Phase 2 · 5 of 6', 'Yes', '~45 minutes', 'Initial sign-off; a 2�
       "Close the project and capture lessons learned"
     ],
     body: `
-${implVideo(15, 'Episode 14 · P2-6 Final Sign-off')}
+${implVideo(15, 'P2-6 Final Sign-off')}
 ${implGlance('Phase 2 · 6 of 6', 'Yes, or by email', '~30 minutes', 'Project closed')}
 <h3>Why this meeting exists</h3>
 <p>To confirm the customer is satisfied and close the original scope. After final sign-off, changes are billable.</p>
@@ -515,7 +519,7 @@ const IMPLEMENTATION_CHECKS = {
             "When a customer asks for a new alert"], c: 0 },
   10: { q: "How does a record get sent from the CRM to the ERP in Phase 2?",
         a: ["Every new CRM record syncs automatically on the next run",
-            "A user ticks Commercient Import on the record, and the next run picks it up",
+            "A user ticks Commercient Import on the record (with Completed and Message blank), and the next run picks it up",
             "The partner exports qualifying records to a CSV each week",
             "Commercient support pushes records on request"], c: 1 },
   11: { q: "What protects the ERP before a new process is switched on?",
@@ -529,7 +533,7 @@ const IMPLEMENTATION_CHECKS = {
             "Because the quiz grader checks the key format",
             "So Phase 1 recognizes the record and updates it instead of creating a duplicate"], c: 3 },
   13: { q: "A test record failed and you corrected the CRM record. How do you retry it?",
-        a: ["Re-flag the record so the corrected data is picked up",
+        a: ["Re-flag the record (clear Completed and Message, tick Import) so the corrected data is picked up",
             "Reset the log row, which retries the corrected data",
             "Delete the process and build it again",
             "Wait for the status to change to Hold"], c: 0 },
@@ -593,7 +597,7 @@ const IMPLEMENTATION_QUIZ = {
          "The customer, because it's ERP data"] },
     { s:2, q:"How is a record sent from the CRM to the ERP in Phase 2?",
       a:["Every new CRM record syncs automatically",
-         "A user ticks Commercient Import on the CRM record",
+         "A user ticks Commercient Import on the CRM record, with Completed and Message blank",
          "The partner exports a CSV each week",
          "Commercient support pushes it manually"] },
     { s:2, q:"What does an \"Export New\" process do?",
@@ -608,7 +612,7 @@ const IMPLEMENTATION_QUIZ = {
          "So the DLL can find the ERP server"] },
     { s:2, q:"A test record failed and you fixed the CRM record. What do you do next?",
       a:["Reset the log row, which retries the already-queued data",
-         "Re-flag the record so the corrected CRM data is picked up",
+         "Re-flag the record (clear Completed and Message, tick Import) so the corrected CRM data is picked up",
          "Delete the process and rebuild it",
          "Wait for the Hold status to clear"] }
   ]
@@ -656,3 +660,26 @@ const IMPLEMENTATION_COURSE = {
   quiz: IMPLEMENTATION_QUIZ
 };
 
+
+
+/* implSeekFix: some hosts don't serve video byte ranges, which disables seeking on the
+   timeline. Once a lesson video starts loading, fetch the whole file as a blob and swap it
+   in, keeping position and play state, so the timeline can be scrubbed. */
+(function implSeekFix(){
+  if (typeof window === 'undefined' || !window.fetch || !window.URL) return;
+  const done = new WeakSet();
+  function upgrade(v){
+    if (done.has(v)) return; done.add(v);
+    const src = (v.getAttribute('src') || '').split('#')[0];
+    if (!/\.(mp4|webm|mov)$/i.test(src)) return;
+    fetch(src).then(r => r.ok ? r.blob() : null).then(b => {
+      if (!b || !v.isConnected) return;
+      const t = v.currentTime || 0.5, playing = !v.paused;
+      v.src = URL.createObjectURL(b);
+      v.addEventListener('loadedmetadata', () => { try { v.currentTime = t; } catch(e){} if (playing) v.play().catch(()=>{}); }, { once:true });
+    }).catch(()=>{});
+  }
+  function scan(root){ (root.querySelectorAll ? root.querySelectorAll('.vid-file video') : []).forEach(v => v.addEventListener('play', () => upgrade(v), { once:true })); }
+  const start = () => { scan(document); new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && scan(n)))).observe(document.body, { childList:true, subtree:true }); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
